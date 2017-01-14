@@ -43,6 +43,7 @@ function drawGraph() {
 		});
 	}
 	else {
+		update();
 		for(var i = 0; i < window.maxDataLength; i++) {
 			window.data.push({time: (Date.now() / 1000) - window.maxDataLength + i,
 				 val: 0});
@@ -100,9 +101,7 @@ function drawInstant() {
 	console.log("Drawing instant graph");
 	var barWidth = window.widthInstant / window.maxVal;
 
-	var x = d3.scale.linear()
-	    .domain([0, window.maxVal + 1])
-	    .range([0, window.widthInstant]);
+	var x = d3.time.scale().range([0, window.widthInstant]);
 	var y = d3.scale.linear().range([window.height, 0]);
 
 	var chart = d3.select("svg.bar")
@@ -115,16 +114,8 @@ function drawInstant() {
 	var yAxis = d3.svg.axis().scale(y)
 	    .orient("left").ticks(5);
 	
-    // Add the X Axis
-    chart.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + window.height + ")")
-        .call(xAxis);
-
-    // Add the Y Axis
-    chart.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
+    x.domain([0, window.maxVal + 1]);
+	y.domain([0, 100]);
 
 	for(var i = 0; i <= window.maxVal; i++) {
 		var bar = chart.append("rect")
@@ -133,6 +124,19 @@ function drawInstant() {
 	    	.attr("width", barWidth - 1)
 	    	.attr("height", 100 * window.counts[i]);
 	}
+	
+	// TODO: These tick marks exist, but they are not all visible,
+	// and none of the labels are visible.
+	// Add the X Axis
+	chart.append("g")
+	    .attr("class", "x axis")
+	    .attr("transform", "translate(0," + height + ")")
+	    .call(xAxis);
+
+	// Add the Y Axis
+	chart.append("g")
+	    .attr("class", "y axis")
+	    .call(yAxis);
 }
 
 // Gets all available courses and adds them to the dropdown selector
