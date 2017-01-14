@@ -18,10 +18,8 @@ export class LoginPage {
 
 
  	public login(){
- 		this.af.auth.login({
-		  email: 'wuxiaofan1996@gmail.com',
-		  password: 'testdfddfdf',
-		},
+ 	console.log("came here");
+ 		this.af.auth.login(this.registerCredentials,
 		{
 		  provider: AuthProviders.Password,
 		  method: AuthMethods.Password,
@@ -31,13 +29,9 @@ export class LoginPage {
   	}
  
   	public register(){
-  	this.navCtrl.push(RegisterPage);
- 	console.log("came to logi");
- 	console.log(this.registerCredentials);
-	 	var email = "wuxiaofan1996@gmail.com";
-	 	var password = "testdfddfdf";
 
-	  this.af.auth.createUser(this.registerCredentials);
+  	this.navCtrl.push(RegisterPage);
+
 
   	}
 
