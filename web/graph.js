@@ -17,7 +17,11 @@ function drawGraph() {
 	
 	var classId = current_cid();
 	if(classId != "Choose a Course") {
-		firebase.database().ref('/Classes/' + classId + '/Students').on('value', function(snapshot) {
+		if(window.currentRef)
+			window.currentRef.off()
+		
+		window.currentRef = firebase.database().ref('/Classes/' + classId + '/Students');	
+		window.currentRef.on('value', function(snapshot) {
 			var totalStudents = snapshot.numChildren();
 			console.log(totalStudents);
 			var sumRating = 0;
