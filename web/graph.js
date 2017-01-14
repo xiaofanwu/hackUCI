@@ -42,9 +42,18 @@ function drawGraph() {
 	// Get Firebase data
 	window.currTime = 0;
 	window.data = [];
-	var databaseRef = firebase.database().ref('/item');
+	var databaseRef = firebase.database().ref('/Classes/1/Students');
 	databaseRef.on('value', function(snapshot) {
-		window.data.push({time: currTime, val: snapshot.val()})
+		var totalStudents = snapshot.numChildren();
+		console.log(totalStudents);
+		var sumRating = 0;
+		snapshot.forEach(function(childSnapshot) {
+			var childData = childSnapshot.child("rating").val();
+
+			sumRating += childData;
+		});
+
+		window.data.push({time: currTime, val: sumRating/totalStudents})
 		update();
 	});
 }
