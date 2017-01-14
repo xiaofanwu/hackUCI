@@ -7,6 +7,8 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
+import { MyPagePage } from '../pages/my-page/my-page';
+
 
 // Import the AF2 Module
 import { AngularFireModule } from 'angularfire2';
@@ -28,7 +30,8 @@ export const firebaseConfig = {
     HomePage,
     TabsPage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    MyPagePage
 
   ],
   imports: [
@@ -43,7 +46,8 @@ export const firebaseConfig = {
     HomePage,
     TabsPage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    MyPagePage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
