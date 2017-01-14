@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ed279727-2a6c-4f0d-b40c-5d01aab3ea9e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web test/database-rules.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web test/firebase.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web test/storage.rules" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web test/index.html" afterPath="$PROJECT_DIR$/web test/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web test/scripts/main.js" afterPath="$PROJECT_DIR$/web test/scripts/main.js" />
-    </list>
+    <list default="true" id="ed279727-2a6c-4f0d-b40c-5d01aab3ea9e" name="Default" comment="" />
     <ignored path="hackUCI.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
