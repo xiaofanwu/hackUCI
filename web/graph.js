@@ -17,7 +17,7 @@ function drawGraph() {
 	
 	var classId = current_cid();
 	if(classId != "Choose a Course") {
-		firebase.database().ref('/Classes/' + classId + '/Students').once('value', function(snapshot) {
+		firebase.database().ref('/Classes/' + classId + '/Students').on('value', function(snapshot) {
 			var totalStudents = snapshot.numChildren();
 			console.log(totalStudents);
 			var sumRating = 0;
@@ -27,12 +27,12 @@ function drawGraph() {
 				sumRating += childData;
 			});
 
-			for(var i = 0; i < window.maxDataLength; i++) {
-				window.data.push({time: (Date.now() / 1000) - window.maxDataLength + i,
-					 val: 0});
+			while(window.data.length < window.maxDataLength) {
+				var newItem = {time: (Date.now() / 1000) + (window.data.length - window.maxDataLength), val: 0};
+				window.data.push(newItem);
 			}
+			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalStudents)});
 			
-			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalStudents)})
 			update();
 			drawAverage();
 			getCurrentRatingsAndDrawInstant();
