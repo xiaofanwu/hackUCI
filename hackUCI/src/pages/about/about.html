@@ -8,4 +8,11 @@
 
 <ion-content padding>
 
+  <ion-item>
+    <ion-range min="0" max="1000" [(ngModel)]="saturation" color="secondary" pin="True">
+      <ion-label range-left>0</ion-label>
+      <ion-label range-right>1000</ion-label>
+    </ion-range>
+  </ion-item>
+
 </ion-content>
