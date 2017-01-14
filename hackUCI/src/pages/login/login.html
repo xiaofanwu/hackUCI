@@ -5,21 +5,25 @@
 </ion-header>
 
 <ion-content padding>
+<form (ngSubmit)="login()" #registerForm="ngForm">
+
 <ion-list>
 
   <ion-item>
     <ion-label stacked>Username</ion-label>
-    <ion-input type="text"></ion-input>
+    <ion-input name="userName" [(ngModel)]="registerCredentials.email" type="text"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label stacked>Password</ion-label>
-    <ion-input type="password"></ion-input>
+    <ion-input name="password" [(ngModel)]="registerCredentials.password" type="password"></ion-input>
   </ion-item>
 
 </ion-list>
 
-<button ion-button>Login</button>
-<button ion-button>Register</button>
+<button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>
+<button ion-button (click)="register()">Register</button>
+
+</form>
 
 </ion-content>
