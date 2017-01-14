@@ -1,5 +1,11 @@
-function drawGraph() {
+function main() {
 	getClasses()
+	//getQeustion()
+	drawGraph()
+}
+
+function drawGraph() {
+	
 	// Set the dimensions of the canvas / graph
 	window.margin = {top: 30, right: 20, bottom: 30, left: 50};
 	window.widthAverage = 600 - margin.left - margin.right;
@@ -78,6 +84,7 @@ function drawInstant() {
 	}
 }
 
+// Gets all available courses and adds them to the dropdown selector
 function getClasses() {
 	firebase.database().ref('Classes').once('value').then(function(snapshot) {
 		var cids = Object.keys(snapshot.val());
@@ -91,6 +98,42 @@ function getClasses() {
 		    select.appendChild(el);
 		}
 	});
+}
+
+function current_cid() {
+	var e = document.getElementById("selectNumber");
+	return e.options[e.selectedIndex].value;
+}
+
+function getQuestions() {
+	console.log("Got the questions")
+	firebase.database().ref('Classes/' + current_cid() + '/questions').once('value').then(function(snapshot) {
+		var qids = Object.keys(snapshot.val());
+		var select = document.getElementById("selectQuestion"); 
+
+		for(var i = 0; i < qids.length; i++) {
+		    var opt = qids[i];
+		    var el = document.createElement("option");
+		    el.textContent = opt;
+		    el.value = opt;
+		    select.appendChild(el);
+		}
+	});
+}
+
+function current_qid() {
+	var e = document.getElementById("selectQuestion");
+	return e.options[e.selectedIndex].value;
+}
+
+function showQuestion() {
+	firebase.database().ref('Classes/' + current_cid()).update({
+		current:current_qid()
+	});
+}
+
+function removeQuestion() {
+	firebase.database().ref('Classes/' + current_cid() + '/current').remove();
 }
 
 function drawAverage() {
@@ -155,9 +198,7 @@ function getCounts(data) {
 
 function addQuestion(question, correct, wrong1, wrong2, wrong3) {
 	alert("Question added!");
-	var e = document.getElementById("selectNumber");
-	var cid = e.options[e.selectedIndex].value;
-    firebase.database().ref('Classes/' + cid + '/questions').push().set({
+    firebase.database().ref('Classes/' + current_cid() + '/questions').push().set({
 		text: question,
     	correct: correct,
     	wrong1: wrong1,

@@ -1,5 +1,9 @@
     <!DOCTYPE html>
 <meta charset="utf-8">
+
+<title>
+LectureHall
+</title>
 <style> /* set the CSS */
 
 body { 
@@ -92,17 +96,26 @@ li a:hover:not(.active) {
 </script>
 
 <script src="graph.js"></script>
-<script> drawGraph(); </script>
+<script> main(); </script>
 
 <svg class="line"></svg>
 <svg class="bar"></svg>
 
 <form id="myForm">
 Course Code:
-  <select id="selectNumber">
+  <select id="selectNumber" onChange="getQuestions();">
     <option>Choose a Course</option>
   </select>
 </form>
+
+<form id="myForm">
+Course Code:
+  <select id="selectQuestion">
+    <option>Choose a Question to Display</option>
+  </select>
+</form>
+<button onclick="showQuestion()">Show Question</button>
+<button onclick="removeQuestion()">Remove Question</button>
 
 <form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
 	wrong1.value, wrong2.value, wrong3.value)">  
