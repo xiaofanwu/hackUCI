@@ -79,3 +79,14 @@ function draw() {
         .attr("class", "y axis")
         .call(yAxis);
 }
+
+function addQuestion(question, correct, wrong1, wrong2, wrong3) {
+	alert("Question added!");
+    firebase.database().ref('questions').set({
+		text: question,
+    	correct: correct,
+    	wrong1: wrong1,
+		wrong2: wrong2,
+		wrong3: wrong3
+    });
+}

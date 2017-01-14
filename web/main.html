@@ -37,4 +37,21 @@ path {
 
 <script src="graph.js"></script>
 <script> drawGraph(); </script>
+
+
+<form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
+	wrong1.value, wrong2.value, wrong3.value)">  
+	Question text:
+   <input type="text" id="question" maxlength="40"><br>
+   Correct answer: 
+   <input type="text" id="correct" maxlength="40"><br>
+   First wrong answer: 
+   <input type="text" id="wrong1" maxlength="40"><br>
+   Second wrong answer:
+   <input type="text" id="wrong2" maxlength="40"><br>
+   Third wrong answer:
+   <input type="text" id="wrong3" maxlength="40"><br>
+   <input name="Submit"  type="submit" value="Submit"/>
+</form>
+
 </body>
