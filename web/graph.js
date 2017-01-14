@@ -101,13 +101,16 @@ function drawInstant() {
 	console.log("Drawing instant graph");
 	var barWidth = window.widthInstant / window.maxVal;
 
-	var x = d3.time.scale().range([0, window.widthInstant]);
+	var x = d3.scale.linear().range([0, window.widthInstant]);
 	var y = d3.scale.linear().range([window.height, 0]);
 
 	var chart = d3.select("svg.bar")
-	    .attr("width", window.widthInstant)
-	    .attr("height", barWidth * (window.maxVal + 1));
-		
+	        .attr("width", window.widthAverage + window.margin.left + window.margin.right)
+	        .attr("height", window.height + window.margin.top + window.margin.bottom)
+	    .append("g")
+	        .attr("transform", 
+				"translate(" + window.margin.left + "," + window.margin.top + ")");
+	
 	// Define the axes
 	var xAxis = d3.svg.axis().scale(x)
 	    .orient("bottom").ticks(5);
