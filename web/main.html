@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <meta charset="utf-8">
 
 <title>
@@ -68,35 +68,14 @@ li a:hover:not(.active) {
 
 </style>
 <!-- Latest compiled and minified CSS -->
+<!--
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <body>
+-->
 
 <!-- <ul>
   <li><a href="#home">LectureHall</a></li>
 </ul> -->
-
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js">
-  
-</script>
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyAPJ_geNYIG06EWr0aHHVpWq34WnkGk5Jw",
-    authDomain: "lecturehall-6910a.firebaseapp.com",
-    databaseURL: "https://lecturehall-6910a.firebaseio.com",
-    storageBucket: "lecturehall-6910a.appspot.com",
-    messagingSenderId: "813929728800"
-  };
-  firebase.initializeApp(config);
-</script>
-
-<script src="graph.js"></script>
-<script> main(); </script>
 
 <svg class="line"></svg>
 <svg class="bar"></svg>
@@ -108,6 +87,7 @@ Course Code:
   </select>
 </form>
 
+<!--
 <form id="myForm">
 Course Code:
   <select id="selectQuestion">
@@ -116,6 +96,7 @@ Course Code:
 </form>
 <button onclick="showQuestion()">Show Question</button>
 <button onclick="removeQuestion()">Remove Question</button>
+-->
 
 <form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
 	wrong1.value, wrong2.value, wrong3.value)">  
@@ -131,5 +112,28 @@ Course Code:
    <input type="text" id="wrong3" maxlength="40"><br>
    <input name="Submit"  type="submit" value="Submit"/>
 </form>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<!--
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+-->
+
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAPJ_geNYIG06EWr0aHHVpWq34WnkGk5Jw",
+    authDomain: "lecturehall-6910a.firebaseapp.com",
+    databaseURL: "https://lecturehall-6910a.firebaseio.com",
+    storageBucket: "lecturehall-6910a.appspot.com",
+    messagingSenderId: "813929728800"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script src="graph.js"></script>
+<script> main(); </script>
 
 </body>

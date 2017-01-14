@@ -1,11 +1,10 @@
 function main() {
-	getClasses()
-	//getQeustion()
-	drawGraph()
+	window.maxDataLength = 100;
+	getClasses();
+	drawGraph();
 }
 
-function drawGraph() {
-	
+function drawGraph() {	
 	// Set the dimensions of the canvas / graph
 	window.margin = {top: 30, right: 20, bottom: 30, left: 50};
 	window.widthAverage = 600 - margin.left - margin.right;
@@ -14,39 +13,82 @@ function drawGraph() {
 	
 	// Get Firebase data
 	window.maxVal = 100;
-	window.currTime = 0;
 	window.data = [];
-	var databaseRef = firebase.database().ref('/Classes/1/Students');
-	databaseRef.on('value', function(snapshot) {
-		var totalStudents = snapshot.numChildren();
-		console.log(totalStudents);
-		var sumRating = 0;
-		snapshot.forEach(function(childSnapshot) {
-			var childData = childSnapshot.child("rating").val();
+	
+	var classId = current_cid();
+	if(classId != "Choose a Course") {
+		firebase.database().ref('/Classes/' + classId + '/Students').once('value', function(snapshot) {
+			var totalStudents = snapshot.numChildren();
+			console.log(totalStudents);
+			var sumRating = 0;
+			snapshot.forEach(function(childSnapshot) {
+				var childData = childSnapshot.child("rating").val();
 
-			sumRating += childData;
+				sumRating += childData;
+			});
+
+			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalStudents)})
+			update();
+			drawAverage();
+			getCurrentRatingsAndDrawInstant();
 		});
-
-		window.data.push({time: currTime, val: sumRating/totalStudents})
-		update();
-		drawInstant();
+	}
+	else {
+		for(var i = 0; i < window.maxDataLength; i++) {
+			window.data.push({time: (Date.now() / 1000) - window.maxDataLength + i,
+				 val: 0});
+		}
+		
 		drawAverage();
-	});
+		getCurrentRatingsAndDrawInstant();
+	}
 }
 
 function update() {
-	var maxLength = 100;
-	// var dar = new Date();
-	d3.select("svg").selectAll("*").remove();
-	if(window.data.length > maxLength)
+	d3.select("svg.line").selectAll("*").remove();
+	d3.select("svg.bar").selectAll("*").remove();
+	if(window.data.length > window.maxDataLength)
 		window.data.shift();
-	window.currTime += 1;
+}
+
+function getCounts(data) {
+	var counts = {};
+	for (var i = 0; i <= window.maxVal; i++)
+		counts[i] = 0;
+
+	for(var i = 0; i < data.length; i++)
+		counts[data[i]] += 1;
+	
+	return counts;
+}
+
+function getCurrentRatingsAndDrawInstant() {
+	var classId = current_cid();
+	if(classId == "Choose a Course") {
+		console.log("Default course");
+		window.counts = [];
+		for(var i = 0; i <= window.maxVal; i++)
+			window.counts.push(0);
+		drawInstant();
+	} else {
+		console.log("Getting ratings for: " + classId);
+		firebase.database().ref('/Classes/' + classId + '/Students').once('value').then(function(snapshot) {
+			window.studentData = snapshot.val();
+			var ratings = [];
+			for(studentId in window.studentData) {
+				ratings.push(window.studentData[studentId].rating);
+			}
+			
+			console.log("Ratings = " + ratings);
+			window.counts = getCounts(ratings);
+			drawInstant();
+		});
+	}
 }
 
 function drawInstant() {
 	// Set counts
-	var counts = getCounts(window.data);
-	window.counts = counts;
+	console.log("Drawing instant graph");
 	var barWidth = window.widthInstant / window.maxVal;
 
 	var x = d3.scale.linear()
@@ -75,12 +117,12 @@ function drawInstant() {
         .attr("class", "y axis")
         .call(yAxis);
 
-	for(i = 0; i <= window.maxVal; i++) {
+	for(var i = 0; i <= window.maxVal; i++) {
 		var bar = chart.append("rect")
 			.attr("x", i * barWidth)
-			.attr("y", window.height - counts[i])
+			.attr("y", window.height - 10 * window.counts[i])
 	    	.attr("width", barWidth - 1)
-	    	.attr("height", counts[i]);
+	    	.attr("height", 10 * window.counts[i]);
 	}
 }
 
@@ -107,17 +149,20 @@ function current_cid() {
 
 function getQuestions() {
 	console.log("Got the questions")
+	drawGraph();
 	firebase.database().ref('Classes/' + current_cid() + '/questions').once('value').then(function(snapshot) {
 		var qids = Object.keys(snapshot.val());
-		var select = document.getElementById("selectQuestion"); 
-
+		
+		/*var select = document.getElementById("selectQuestion"); 
 		for(var i = 0; i < qids.length; i++) {
 		    var opt = qids[i];
 		    var el = document.createElement("option");
 		    el.textContent = opt;
 		    el.value = opt;
 		    select.appendChild(el);
-		}
+		}*/
+		
+		
 	});
 }
 
@@ -138,6 +183,7 @@ function removeQuestion() {
 
 function drawAverage() {
 	// Set the ranges
+	console.log("Drawing average graph");
 	var x = d3.time.scale().range([0, window.widthAverage]);
 	var y = d3.scale.linear().range([window.height, 0]);
 
@@ -167,7 +213,7 @@ function drawAverage() {
     // Add the valueline path.
     svg.append("path")
         .attr("class", "line")
-        .attr("d", valueline(data));
+        .attr("d", valueline(window.data));
 
     // Add the X Axis
     svg.append("g")
@@ -179,21 +225,6 @@ function drawAverage() {
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
-}
-
-function getCounts(data) {
-	var counts = {};
-	for (i = 0; i <= window.maxVal; i++) {
-		// Create fake counts
-		counts[i] = i;
-		// counts[i] = 0;
-	}
-
-	for(i = 0; i < data.length; i++) {
-		counts[data[i]['val']] += 1;
-	}
-	
-	return counts;
 }
 
 function addQuestion(question, correct, wrong1, wrong2, wrong3) {
