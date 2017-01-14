@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {AngularFire, AuthProviders, AuthMethods} from 'angularfire2';
 import { NavController } from 'ionic-angular';
 import { RegisterPage } from '../register/register';
-import { TabsPage } from '../pages/tabs/tabs';
+import { TabsPage } from '../tabs/tabs';
 
 @Component({
   selector: 'page-login',
@@ -27,7 +27,6 @@ export class LoginPage {
 		  method: AuthMethods.Password,
 		});
 		this.navCtrl.push(TabsPage);
-
 
   	}
  

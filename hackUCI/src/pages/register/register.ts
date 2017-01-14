@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import {AngularFire, AuthProviders, AuthMethods} from 'angularfire2';
 
 /*
   Generated class for the Register page.
@@ -12,6 +13,8 @@ import { NavController, NavParams } from 'ionic-angular';
   templateUrl: 'register.html'
 })
 export class RegisterPage {
+  registerCredentials = {email: '', password: ''};
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public af: AngularFire) {}
 
