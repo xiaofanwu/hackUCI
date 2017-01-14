@@ -30,27 +30,35 @@ function drawGraph() {
 	        .attr("transform", 
 				"translate(" + margin.left + "," + margin.top + ")");
 
-	window.data = [];
+	// Create random data
+	/*window.data = [];
 	window.currTime = 0;
 	var initSize = 100;
 	for (var i = 0; i < initSize; i++) {
 		window.data[i] = {time: currTime, val: Math.random()};
 		currTime += 1;
-	}
+	}*/
 	
-	// console.log(window.data);
-	
-	window.setInterval(updateAndDraw, 1000);
+	// Get Firebase data
+	window.currTime = 0;
+	window.data = [];
+	var databaseRef = firebase.database().ref('/item');
+	databaseRef.on('value', function(snapshot) {
+		window.data.push({time: currTime, val: snapshot.val()})
+		update();
+	});
 }
 
-function updateAndDraw() {
-	// Update
+function update() {
+	var maxLength = 100;
 	svg.selectAll("*").remove();
-	window.data.shift();
-	window.data[window.data.length] = {time: currTime, val: Math.random()};
+	if(window.data.length > maxLength)
+		window.data.shift();
 	window.currTime += 1;
-	
-	// console.log(data);
+	draw();
+}
+
+function draw() {
     // Scale the range of the data
     x.domain(d3.extent(window.data, function(d) { return d.time; }));
     y.domain([0, d3.max(window.data, function(d) { return d.val; })]);
