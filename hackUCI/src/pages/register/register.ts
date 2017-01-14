@@ -19,8 +19,8 @@ export class RegisterPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public af: AngularFire) {}
 
-    public register(){
-	 	console.log("came to logi");
+    public register() {
+	 	//console.log("came to logi");
 	 	console.log(this.registerCredentials);
 		this.af.auth.createUser(this.registerCredentials);
 		this.navCtrl.push(TabsPage);

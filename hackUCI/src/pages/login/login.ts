@@ -17,7 +17,6 @@ export class LoginPage {
 
 
  	public login(){
- 	console.log("came here");
  		this.af.auth.login(this.registerCredentials,
 		{
 		  provider: AuthProviders.Password,
