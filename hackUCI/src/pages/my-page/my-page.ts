@@ -19,7 +19,7 @@ export class MyPagePage {
   qtext:any
   qobj:any;
   answers:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public )
+  constructor(public navCtrl: NavController, public navParams: NavParams )
   {
     this.qobj = '';
     this.class=navParams.get('class');

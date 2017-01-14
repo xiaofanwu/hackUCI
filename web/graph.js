@@ -1,5 +1,5 @@
 function main() {
-	window.maxDataLength = 100;
+	window.maxDataLength = 10;
 	getClasses();
 	drawGraph();
 }
@@ -27,6 +27,11 @@ function drawGraph() {
 				sumRating += childData;
 			});
 
+			for(var i = 0; i < window.maxDataLength; i++) {
+				window.data.push({time: (Date.now() / 1000) - window.maxDataLength + i,
+					 val: 0});
+			}
+			
 			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalStudents)})
 			update();
 			drawAverage();
@@ -120,17 +125,18 @@ function drawInstant() {
 	for(var i = 0; i <= window.maxVal; i++) {
 		var bar = chart.append("rect")
 			.attr("x", i * barWidth)
-			.attr("y", window.height - 10 * window.counts[i])
+			.attr("y", window.height - 100 * window.counts[i])
 	    	.attr("width", barWidth - 1)
-	    	.attr("height", 10 * window.counts[i]);
+	    	.attr("height", 100 * window.counts[i]);
 	}
 }
 
 // Gets all available courses and adds them to the dropdown selector
 function getClasses() {
+	//document.getElementById('selectClass').options.length = 0;
 	firebase.database().ref('Classes').once('value').then(function(snapshot) {
 		var cids = Object.keys(snapshot.val());
-		var select = document.getElementById("selectNumber"); 
+		var select = document.getElementById("selectClass"); 
 
 		for(var i = 0; i < cids.length; i++) {
 		    var opt = cids[i];
@@ -143,7 +149,7 @@ function getClasses() {
 }
 
 function current_cid() {
-	var e = document.getElementById("selectNumber");
+	var e = document.getElementById("selectClass");
 	return e.options[e.selectedIndex].value;
 }
 
@@ -161,8 +167,6 @@ function getQuestions() {
 		    el.value = opt;
 		    select.appendChild(el);
 		}*/
-		
-		
 	});
 }
 
@@ -208,7 +212,8 @@ function drawAverage() {
 				
     // Scale the range of the data
     x.domain(d3.extent(window.data, function(d) { return d.time; }));
-    y.domain([0, d3.max(window.data, function(d) { return d.val; })]);
+    //y.domain([0, d3.max(window.data, function(d) { return d.val; })]);
+	y.domain([0, window.maxVal]);
 
     // Add the valueline path.
     svg.append("path")
@@ -227,15 +232,44 @@ function drawAverage() {
         .call(yAxis);
 }
 
-function addQuestion(question, correct, wrong1, wrong2, wrong3) {
+function getCounts(data) {
+	var counts = {};
+	for (i = 0; i <= window.maxVal; i++)
+		counts[i] = 0;
+
+	for(i = 0; i < data.length; i++)
+		counts[data[i]] += 1;
+	
+	return counts;
+}
+
+function addQuestion(txt, correct, wrong1, wrong2, wrong3, wrong4) {
 	alert("Question added!");
-    firebase.database().ref('Classes/' + current_cid() + '/questions').push().set({
-		text: question,
-    	correct: correct,
-    	wrong1: wrong1,
-		wrong2: wrong2,
-		wrong3: wrong3
-    });
+	question = firebase.database().ref('Classes/' + current_cid() + '/questions').push();
+	question.set({
+		text: txt
+	});
+	console.log('1')
+	question.push().set({
+		text: correct,
+		correct: true
+	});
+	question.push().set({
+		text: wrong1,
+		correct: false
+	}); 
+	question.push().set({
+		text: wrong2,
+		correct: false
+	});
+	question.push().set({
+		text: wrong3,
+		correct: false
+	});
+	question.push().set({
+		text: wrong4,
+		correct: false
+	});
 }
 
 function printData() {
