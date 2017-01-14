@@ -1,13 +1,13 @@
 'use strict';
 
-// Initializes FriendlyChat.
-function FriendlyChat() {
+// Initializes LeactureHall.
+function LeactureHall() {
 
   this.initFirebase();
 }
 
 // Sets up shortcuts to Firebase features and initiate firebase auth.
-FriendlyChat.prototype.initFirebase = function() {
+LeactureHall.prototype.initFirebase = function() {
   // Shortcuts to Firebase SDK features.
   this.auth = firebase.auth();
   this.database = firebase.database();
@@ -18,5 +18,5 @@ FriendlyChat.prototype.initFirebase = function() {
 };
 
 window.onload = function() {
-  window.friendlyChat = new FriendlyChat();
+  window.friendlyChat = new LeactureHall();
 };
