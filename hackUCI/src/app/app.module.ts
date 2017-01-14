@@ -7,6 +7,18 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
 
+// Import the AF2 Module
+import { AngularFireModule } from 'angularfire2';
+
+// AF2 Settings
+export const firebaseConfig = {
+  apiKey: "AIzaSyAPJ_geNYIG06EWr0aHHVpWq34WnkGk5Jw",
+  authDomain: "lecturehall-6910a.firebaseapp.com",
+  databaseURL: "https://lecturehall-6910a.firebaseio.com",
+  storageBucket: "lecturehall-6910a.appspot.com",
+  messagingSenderId: "813929728800"
+};
+
 @NgModule({
   declarations: [
     MyApp,
@@ -17,7 +29,8 @@ import { LoginPage } from '../pages/login/login';
     LoginPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
