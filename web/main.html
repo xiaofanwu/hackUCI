@@ -18,6 +18,16 @@ path {
     shape-rendering: crispEdges;
 }
 
+.bar rect {
+  fill: steelblue;
+}
+
+.bar text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
 </style>
 <body>
 
@@ -38,6 +48,8 @@ path {
 <script src="graph.js"></script>
 <script> drawGraph(); </script>
 
+<svg class="line"></svg>
+<svg class="bar"></svg>
 
 <form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
 	wrong1.value, wrong2.value, wrong3.value)">  

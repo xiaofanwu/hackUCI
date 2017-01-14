@@ -1,64 +1,97 @@
 function drawGraph() {
 	// Set the dimensions of the canvas / graph
-	var margin = {top: 30, right: 20, bottom: 30, left: 50},
-	    width = 600 - margin.left - margin.right,
-	    height = 270 - margin.top - margin.bottom;
-	window.height = height;
-
-	// Set the ranges
-	window.x = d3.time.scale().range([0, width]);
-	window.y = d3.scale.linear().range([height, 0]);
-
-	// Define the axes
-	window.xAxis = d3.svg.axis().scale(x)
-	    .orient("bottom").ticks(5);
-
-	window.yAxis = d3.svg.axis().scale(y)
-	    .orient("left").ticks(5);
-
-	// Define the line
-	window.valueline = d3.svg.line()
-	    .x(function(d) { return x(d.time); })
-	    .y(function(d) { return y(d.val); });
-    
-	// Adds the svg canvas
-	window.svg = d3.select("body")
-	    .append("svg")
-	        .attr("width", width + margin.left + margin.right)
-	        .attr("height", height + margin.top + margin.bottom)
-	    .append("g")
-	        .attr("transform", 
-				"translate(" + margin.left + "," + margin.top + ")");
-
-	// Create random data
-	/*window.data = [];
-	window.currTime = 0;
-	var initSize = 100;
-	for (var i = 0; i < initSize; i++) {
-		window.data[i] = {time: currTime, val: Math.random()};
-		currTime += 1;
-	}*/
+	window.margin = {top: 30, right: 20, bottom: 30, left: 50};
+	window.widthAverage = 600 - margin.left - margin.right;
+	window.widthInstant = 300 - margin.left - margin.right;
+	window.height = 270 - margin.top - margin.bottom;
 	
 	// Get Firebase data
+	window.maxVal = 100;
 	window.currTime = 0;
 	window.data = [];
+	
 	var databaseRef = firebase.database().ref('/item');
 	databaseRef.on('value', function(snapshot) {
 		window.data.push({time: currTime, val: snapshot.val()})
 		update();
+		drawInstant();
+		drawAverage();
 	});
 }
 
 function update() {
 	var maxLength = 100;
-	svg.selectAll("*").remove();
+	d3.select("svg").selectAll("*").remove();
 	if(window.data.length > maxLength)
 		window.data.shift();
 	window.currTime += 1;
-	draw();
 }
 
-function draw() {
+function drawInstant() {
+	// Set counts
+	var counts = getCounts(window.data);
+	window.counts = counts;
+	var barWidth = window.widthInstant / window.maxVal;
+
+	var x = d3.scale.linear()
+	    .domain([0, window.maxVal + 1])
+	    .range([0, window.widthInstant]);
+	var y = d3.scale.linear().range([window.height, 0]);
+
+	var chart = d3.select("svg.bar")
+	    .attr("width", window.widthInstant)
+	    .attr("height", barWidth * (window.maxVal + 1));
+		
+	// Define the axes
+	var xAxis = d3.svg.axis().scale(x)
+	    .orient("bottom").ticks(5);
+	var yAxis = d3.svg.axis().scale(y)
+	    .orient("left").ticks(5);
+	
+    // Add the X Axis
+    chart.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + window.height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    chart.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+	for(i = 0; i <= window.maxVal; i++) {
+		var bar = chart.append("rect")
+			.attr("x", i * barWidth)
+			.attr("y", window.height - counts[i])
+	    	.attr("width", barWidth - 1)
+	    	.attr("height", counts[i]);
+	}
+}
+
+function drawAverage() {
+	// Set the ranges
+	var x = d3.time.scale().range([0, window.widthAverage]);
+	var y = d3.scale.linear().range([window.height, 0]);
+
+	// Define the axes
+	var xAxis = d3.svg.axis().scale(x)
+	    .orient("bottom").ticks(5);
+	var yAxis = d3.svg.axis().scale(y)
+	    .orient("left").ticks(5);
+
+	// Define the line
+	var valueline = d3.svg.line()
+	    .x(function(d) { return x(d.time); })
+	    .y(function(d) { return y(d.val); });
+
+	// Adds the svg canvas
+	var svg = d3.select("svg.line")
+	        .attr("width", window.widthAverage + window.margin.left + window.margin.right)
+	        .attr("height", window.height + window.margin.top + window.margin.bottom)
+	    .append("g")
+	        .attr("transform", 
+				"translate(" + window.margin.left + "," + window.margin.top + ")");
+				
     // Scale the range of the data
     x.domain(d3.extent(window.data, function(d) { return d.time; }));
     y.domain([0, d3.max(window.data, function(d) { return d.val; })]);
@@ -80,13 +113,32 @@ function draw() {
         .call(yAxis);
 }
 
+function getCounts(data) {
+	var counts = {};
+	for (i = 0; i <= window.maxVal; i++) {
+		// Create fake counts
+		counts[i] = i;
+		// counts[i] = 0;
+	}
+
+	for(i = 0; i < data.length; i++) {
+		counts[data[i]['val']] += 1;
+	}
+	
+	return counts;
+}
+
 function addQuestion(question, correct, wrong1, wrong2, wrong3) {
 	alert("Question added!");
-    firebase.database().ref('questions').set({
+    firebase.database().ref('Classes/1/questions').set({
 		text: question,
     	correct: correct,
     	wrong1: wrong1,
 		wrong2: wrong2,
 		wrong3: wrong3
     });
+}
+
+function printData() {
+	return window.data;
 }
