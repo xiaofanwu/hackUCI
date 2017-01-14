@@ -21,10 +21,10 @@
       {{qobj.text}}
     </ion-card-header>
 
-    <ion-list>
-      <button ion-item>
-        <ion-icon name="cart" item-left></ion-icon>
-        Shopping
+    <ion-list [virtualScroll]="answers">
+
+      <button ion-item *virtualItem="let answer">
+        {{answer}}
       </button>
 
     </ion-list>

@@ -18,7 +18,8 @@ export class MyPagePage {
   questionNum:any;
   qtext:any
   qobj:any;
-  constructor(public navCtrl: NavController, public navParams: NavParams)
+  answers:any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public )
   {
     this.qobj = '';
     this.class=navParams.get('class');
@@ -26,14 +27,16 @@ export class MyPagePage {
     console.log(this.questionNum);
     this.qtext=firebase.database().ref('/Classes/1/questions/'+this.questionNum);
     this.qtext.once('value',this.setValues,this)
-    console.log(this.qtext);
+    console.log('qtext',this.qtext);
 
 
   }
 
   setValues(snapshot){
     this.qobj=snapshot.val();
-    console.log(this.qobj);
+    this.answers=this.qobj.answers;
+    console.log('answers',this.answers);
+    console.log('qobj',this.qobj);
   }
 
   ionViewDidLoad() {
