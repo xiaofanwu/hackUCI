@@ -11,7 +11,6 @@ import { TabsPage } from '../tabs/tabs';
 export class LoginPage {
   registerCredentials = {email: '', password: ''};
 
-
   constructor(public navCtrl: NavController, public af: AngularFire) {
 
   }
