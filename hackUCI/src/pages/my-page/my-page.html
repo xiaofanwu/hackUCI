@@ -21,13 +21,13 @@
       {{qobj.text}}
     </ion-card-header>
 
-    <ion-list [virtualScroll]="answers">
+    <ion-list >
+      <ion-item class = 'button' (click)='submit(item.$key)'  *ngFor="let item of stuff | async">
+        {{ item.text}}
+      </ion-item>
+      </ion-list>
 
-      <button ion-item *virtualItem="let answer">
-        {{answer}}
-      </button>
 
-    </ion-list>
   </ion-card>
 
 </ion-content>
