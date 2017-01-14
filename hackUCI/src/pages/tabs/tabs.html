@@ -10,6 +10,13 @@
 	</li>
 </ul> -->
 
+<ion-header>
+  <ion-navbar>
+    <ion-title>Course Code</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
 <ion-list>
 	<ion-item *ngFor="let class of classes | async">
 	<button ion-item (click)="classSelect(class.$value)">
@@ -20,7 +27,7 @@
 
 <ion-input placeholder="Course Code" [(ngModel)]="courseCode.cc"></ion-input>
 <button ion-button round outline (click)="classEnroll()">Enroll</button>
-
+</ion-content>
 
 <!-- 
 <ion-nav id="nav" #content [root]="rootPage"></ion-nav> -->
