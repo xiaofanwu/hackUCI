@@ -1,5 +1,22 @@
-<ion-tabs>
+<!-- <ion-tabs>
   <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="home"></ion-tab>
   <ion-tab [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
   <ion-tab [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>
-</ion-tabs>
+</ion-tabs> -->
+
+<!-- <ul>
+	<li ng-repeat="class in classes">
+		{{class.key}}: {{class.val}}
+	</li>
+</ul> -->
+
+<ion-list>
+	<ion-item *ngFor="let class of classes | async">
+	<button ion-item (click)="classSelect(class.$value)">
+		{{class.$value}}
+	</button>
+	</ion-item>
+</ion-list>
+
+<!-- 
+<ion-nav id="nav" #content [root]="rootPage"></ion-nav> -->
