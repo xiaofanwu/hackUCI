@@ -19,7 +19,7 @@ export class AboutPage {
   question:any
   check:any
   constructor(public navCtrl: NavController, public af: AngularFire,private navParams: NavParams) {
-    this.question=firebase.database().ref('/Classes/1/current');
+    this.question=firebase.database().ref('/Classes/'+this.navParams.get('cid')+'/current');
     this.question.on("value",this.onChange,this);
     this.userID = this.af.auth.getAuth().uid;
 
@@ -46,7 +46,7 @@ export class AboutPage {
   onChange(snapshot){
     console.log("We Made It");
     if(snapshot.val()!=null) {
-      this.navCtrl.push(MyPagePage,{'class':1,'question':1});
+      this.navCtrl.push(MyPagePage,{'class':this.navParams.get('cid'),'question':1});
     }
   }
 
