@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import {AngularFire} from 'angularfire2';
+import {FIREBASE_PROVIDERS, defaultFirebase, AngularFire} from 'angularfire2';
 import {LoginPage} from "../login/login";
 import {MyPagePage} from "../my-page/my-page";
 import firebase from 'firebase'
@@ -18,10 +18,13 @@ export class AboutPage {
   userID:any
   question:any
   check:any
+  stud:any
   constructor(public navCtrl: NavController, public af: AngularFire,private navParams: NavParams) {
     this.question=firebase.database().ref('/Classes/'+this.navParams.get('cid')+'/current');
     this.question.on("value",this.onChange,this);
     this.userID = this.af.auth.getAuth().uid;
+    this.stud=firebase.database().ref('/Classes/' + this.navParams.get('cid') + '/Students/'+this.userID+'/rating')
+    this.stud.once("value",function(snapshot){this.rating=snapshot.val()},this);
 
   }
 
@@ -46,7 +49,8 @@ export class AboutPage {
   onChange(snapshot){
     console.log("We Made It");
     if(snapshot.val()!=null) {
-      this.navCtrl.push(MyPagePage,{'class':this.navParams.get('cid'),'question':1});
+      console.log("snapstuff",snapshot.val());
+      this.navCtrl.push(MyPagePage,{'class':this.navParams.get('cid'),'question':snapshot.val()});
     }
   }
 
