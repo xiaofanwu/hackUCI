@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {AngularFire} from 'angularfire2';
+import {LoginPage} from "../login/login";
 
 @Component({
   selector: 'page-about',
@@ -26,6 +27,13 @@ export class AboutPage {
     //  console.log(snapshot.key)
     //  console.log(snapshot.val())
     //});
+  }
+
+  logout(){
+    console.log("here");
+    this.af.auth.logout();
+    this.navCtrl.push(LoginPage);
+
   }
 
 }
