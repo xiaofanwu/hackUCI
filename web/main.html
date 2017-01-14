@@ -103,13 +103,13 @@ li a:hover:not(.active) {
 
 <form id="myForm">
 Course Code:
-  <select id="selectNumber" onChange="getQuestions();">
+  <select id="selectClass" onChange="getQuestions();">
     <option>Choose a Course</option>
   </select>
 </form>
 
 <form id="myForm">
-Course Code:
+Question:
   <select id="selectQuestion">
     <option>Choose a Question to Display</option>
   </select>
@@ -118,7 +118,7 @@ Course Code:
 <button onclick="removeQuestion()">Remove Question</button>
 
 <form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
-	wrong1.value, wrong2.value, wrong3.value)">  
+	wrong1.value, wrong2.value, wrong3.value, wrong4.value)">  
 	Question text:
    <input type="text" id="question" maxlength="40"><br>
    Correct answer: 
@@ -129,6 +129,8 @@ Course Code:
    <input type="text" id="wrong2" maxlength="40"><br>
    Third wrong answer:
    <input type="text" id="wrong3" maxlength="40"><br>
+   Fourth wrong answer:
+   <input type="text" id="wrong4" maxlength="40"><br>
    <input name="Submit"  type="submit" value="Submit"/>
 </form>
 
