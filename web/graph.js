@@ -1,4 +1,5 @@
 function drawGraph() {
+	getClasses()
 	// Set the dimensions of the canvas / graph
 	window.margin = {top: 30, right: 20, bottom: 30, left: 50};
 	window.widthAverage = 600 - margin.left - margin.right;
@@ -29,6 +30,7 @@ function drawGraph() {
 
 function update() {
 	var maxLength = 100;
+	// var dar = new Date();
 	d3.select("svg").selectAll("*").remove();
 	if(window.data.length > maxLength)
 		window.data.shift();
@@ -74,6 +76,21 @@ function drawInstant() {
 	    	.attr("width", barWidth - 1)
 	    	.attr("height", counts[i]);
 	}
+}
+
+function getClasses() {
+	firebase.database().ref('Classes').once('value').then(function(snapshot) {
+		var cids = Object.keys(snapshot.val());
+		var select = document.getElementById("selectNumber"); 
+
+		for(var i = 0; i < cids.length; i++) {
+		    var opt = cids[i];
+		    var el = document.createElement("option");
+		    el.textContent = opt;
+		    el.value = opt;
+		    select.appendChild(el);
+		}
+	});
 }
 
 function drawAverage() {
@@ -138,7 +155,9 @@ function getCounts(data) {
 
 function addQuestion(question, correct, wrong1, wrong2, wrong3) {
 	alert("Question added!");
-    firebase.database().ref('Classes/1/questions').set({
+	var e = document.getElementById("selectNumber");
+	var cid = e.options[e.selectedIndex].value;
+    firebase.database().ref('Classes/' + cid + '/questions').push().set({
 		text: question,
     	correct: correct,
     	wrong1: wrong1,
