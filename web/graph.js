@@ -1,6 +1,5 @@
 function main() {
 	getClasses()
-	//getQeustion()
 	drawGraph()
 }
 
@@ -86,9 +85,10 @@ function drawInstant() {
 
 // Gets all available courses and adds them to the dropdown selector
 function getClasses() {
+	//document.getElementById('selectClass').options.length = 0;
 	firebase.database().ref('Classes').once('value').then(function(snapshot) {
 		var cids = Object.keys(snapshot.val());
-		var select = document.getElementById("selectNumber"); 
+		var select = document.getElementById("selectClass"); 
 
 		for(var i = 0; i < cids.length; i++) {
 		    var opt = cids[i];
@@ -101,12 +101,12 @@ function getClasses() {
 }
 
 function current_cid() {
-	var e = document.getElementById("selectNumber");
+	var e = document.getElementById("selectClass");
 	return e.options[e.selectedIndex].value;
 }
 
 function getQuestions() {
-	console.log("Got the questions")
+	//document.getElementById('selectQuestion').options.length = 0;
 	firebase.database().ref('Classes/' + current_cid() + '/questions').once('value').then(function(snapshot) {
 		var qids = Object.keys(snapshot.val());
 		var select = document.getElementById("selectQuestion"); 
@@ -196,15 +196,33 @@ function getCounts(data) {
 	return counts;
 }
 
-function addQuestion(question, correct, wrong1, wrong2, wrong3) {
+function addQuestion(txt, correct, wrong1, wrong2, wrong3, wrong4) {
 	alert("Question added!");
-    firebase.database().ref('Classes/' + current_cid() + '/questions').push().set({
-		text: question,
-    	correct: correct,
-    	wrong1: wrong1,
-		wrong2: wrong2,
-		wrong3: wrong3
-    });
+	question = firebase.database().ref('Classes/' + current_cid() + '/questions').push();
+	question.set({
+		text: txt
+	});
+	console.log('1')
+	question.push().set({
+		text: correct,
+		correct: true
+	});
+	question.push().set({
+		text: wrong1,
+		correct: false
+	}); 
+	question.push().set({
+		text: wrong2,
+		correct: false
+	});
+	question.push().set({
+		text: wrong3,
+		correct: false
+	});
+	question.push().set({
+		text: wrong4,
+		correct: false
+	});
 }
 
 function printData() {
