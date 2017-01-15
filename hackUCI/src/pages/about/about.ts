@@ -19,9 +19,11 @@ export class AboutPage {
   ratingItem:any
   userID:any
   question:any
+  studentQuestion: any
   check:any
   stud:any
   constructor(public navCtrl: NavController, public af: AngularFire,private navParams: NavParams) {
+    this.studentQuestion = "";
     this.question=firebase.database().ref('/Classes/'+this.navParams.get('cid')+'/current');
     this.question.on("value",this.onChange,this);
     this.userID = this.af.auth.getAuth().uid;
@@ -36,10 +38,10 @@ export class AboutPage {
     //console.log(this.rating);
     this.ratingItem = this.af.database.object('/Classes/' + this.navParams.get('cid') + '/Students/'+this.userID+'/rating', { preserveSnapshot: true });
     this.ratingItem.set(this.rating);
-	
+
 	this.ratingTimestamp = this.af.database.object('/Classes/' + this.navParams.get('cid') + '/Students/' + this.userID + '/timestamp', {preserveSnapshot: true});
 	this.ratingTimestamp.set(Date.now() / 1000);
-	
+
     //this.item.subscribe(snapshot => {
     //  console.log(snapshot.key)
     //  console.log(snapshot.val())
@@ -70,4 +72,17 @@ export class AboutPage {
       console.log(err);
     });
   }
+
+  submitQuestion() {
+
+    let studentConcern = firebase.database().ref('Classes/' + this.navParams.get('cid') + '/studentQuestions').push();
+
+    studentConcern.set({
+      question: this.studentQuestion,
+      handled: false,
+      student: this.userID
+    })
+
+  }
+
 }
