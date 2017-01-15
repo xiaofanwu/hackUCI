@@ -38,6 +38,18 @@ form {
 	left:40px;
 }
 
+input
+{
+    border-radius: 25px;
+    border: 1px solid #D3D3D3;
+    padding: 15px; 
+    width: 300px;
+    height: 2px;
+    margin-bottom: 1px;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+
 
 /* Style the list */
 ul.tab {
