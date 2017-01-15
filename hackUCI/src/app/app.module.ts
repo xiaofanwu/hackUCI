@@ -8,6 +8,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { MyPagePage } from '../pages/my-page/my-page';
+import { AddClassPage } from '../pages/add-class/add-class';
 
 
 // Import the AF2 Module
@@ -31,7 +32,8 @@ export const firebaseConfig = {
     TabsPage,
     LoginPage,
     RegisterPage,
-    MyPagePage
+    MyPagePage,
+    AddClassPage
 
   ],
   imports: [
@@ -47,8 +49,10 @@ export const firebaseConfig = {
     TabsPage,
     LoginPage,
     RegisterPage,
-    MyPagePage
-  ],
+    MyPagePage,
+    AddClassPage
+
+    ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}

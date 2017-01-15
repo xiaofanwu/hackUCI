@@ -1,21 +1,22 @@
 import { Component } from '@angular/core';
+import { NavController, NavParams, ViewController} from 'ionic-angular';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { HomePage } from '../home/home';
 import { AboutPage } from '../about/about';
 import { ContactPage } from '../contact/contact';
-import { NavController } from 'ionic-angular';
 import { ModalController,Modal } from 'ionic-angular';
-import { AddClassPage } from '../add-class/add-class';
+/*
+  Generated class for the AddClass page.
 
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+*/
 @Component({
-  templateUrl: 'tabs.html'
+  selector: 'page-add-class',
+  templateUrl: 'add-class.html'
 })
-export class TabsPage {
-  // this tells the tabs component which Pages
-  // should be each tab's root Page
-  // tab1Root: any = HomePage;
-  // tab2Root: any = AboutPage;
-  // tab3Root: any = ContactPage;
+export class AddClassPage {
+
   userID: any
   classes: FirebaseListObservable<any>;
   classesAvailable: FirebaseListObservable<any>;
@@ -25,7 +26,10 @@ export class TabsPage {
   courseCode = {cc:''}
   classEnrolled:string[] = [];
 
-  constructor(public navCtrl: NavController, public af: AngularFire,public modalCtrl: ModalController) {
+
+  constructor(public navCtrl: NavController, public af: AngularFire, public navParams: NavParams,public viewCtrl: ViewController
+) {
+
   	this.classes = af.database.list('/Users/' + this.af.auth.getAuth().uid + '/Enrolled');
     this.classesAvailable = af.database.list('/Classes');
 
@@ -57,33 +61,23 @@ export class TabsPage {
 
   }
 
-  presentModal() {
-    console.log("added moda;");
-    let modal = this.modalCtrl.create(AddClassPage);
-    // this.navCtrl.present(modal);
-
-    modal.present();
-  }
-
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ***********');
+    console.log('ionViewDidLoad AddClassPage');
   }
-
-  showSelectValue(mySelect) {
-    this.selected = mySelect;
+  dismiss(){
+    this.viewCtrl.dismiss();
   }
-  deleteClass(cid:any){
-    console.log("delete does not work");
-    let toBeDeleted = this.af.database.object('/Users/' + this.userID + '/Enrolled');
-
-  }
-
 
   classSelect(cid:any) {
   	this.navCtrl.push(AboutPage, {
   		cid:cid
   	});
   }
+
+   showSelectValue(mySelect) {
+    this.selected = mySelect;
+  }
+
 
   classEnroll(cid:any) {
   	this.userID = this.af.auth.getAuth().uid;
@@ -92,10 +86,14 @@ export class TabsPage {
     // this.enroll = this.af.database.list('/Users/' + this.userID + '/Enrolled/').push('new enrollment');
     //console.log(this.courseCode.cc);
     this.enroll.push(this.selected);
+    this.viewCtrl.dismiss();
 
     // this.enroll.set(this.selected);
-    this.navCtrl.push(AboutPage, {
-      cid:this.selected
-    });
+
+    // this.navCtrl.push(AboutPage, {
+    //   cid:this.selected
+    // });
   }
+
+
 }
