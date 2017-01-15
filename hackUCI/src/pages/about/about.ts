@@ -6,6 +6,7 @@ import {MyPagePage} from "../my-page/my-page";
 import firebase from 'firebase'
 import { Geolocation } from 'ionic-native';
 
+
 @Component({
   selector: 'page-about',
   templateUrl: 'about.html'
@@ -61,8 +62,12 @@ export class AboutPage {
 
   checkIn() {
     Geolocation.getCurrentPosition().then((position) => {
+      console.log(position.coords.latitude,"position!!!!");
+
       this.check = this.af.database.object('/Classes/' + this.navParams.get('cid') + '/Attendence/' + this.userID, { preserveSnapshot: true });
-      this.check.set({"Date": new Date().toISOString(), "Lat":position.coords.latitude, "Long":position.coords.longitude});
+      this.check.set({"lat":position.coords.latitude, "lng":position.coords.longitude});
+    }, (err) => {
+      console.log(err);
     });
   }
 }

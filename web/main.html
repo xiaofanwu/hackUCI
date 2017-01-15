@@ -4,16 +4,42 @@
 <title>
 LectureHall
 </title>
+ <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 30%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="main.css"/>
 
+<ul class="tab">
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Homepage')" id="defaultOpen">Homepage</a></li>  
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Map')">Map</a></li>
+</ul>
+
 <body>
 <!-- <ul>
   <li><a href="#home">LectureHall</a></li>
 </ul> -->
+<div id="map"></div>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWNU9d07vv6-O7ggJy21GkL-Pv1kOEKjQ&callback=initMap">
+    </script>
 
+<div id="Homepage" class="tabcontent">
 <div class="header">LectureHall</div>
 <svg class="line"></svg>
 
@@ -81,4 +107,18 @@ Question:
 <script src="graph.js"></script>
 <script> main(); </script>
 
+<script>
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+
 </body>
+</div>
+
+<div id="Map" class="tabcontent">
+</div>
+
+
+
+
+
