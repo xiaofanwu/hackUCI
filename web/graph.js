@@ -290,15 +290,52 @@ function getQuestions() {
 		}
 	});
 	
-	firebase.database().ref('Classes/' + current_cid() + '/studentQuestions').on('value', function(snapshot) {
+	// Text box for student questions
+	/*firebase.database().ref('Classes/' + current_cid() + '/studentQuestions').on('value', function(snapshot) {
 		var value = "";
 		window.messages = snapshot.val();
 		for(messageId in window.messages) {
-			messageText = window.messages[messageId].text;
+			messageText = window.messages[messageId].question;
 			value += messageText + "\n\n";
 		}
 		document.getElementById("textBox").value = value;
+	});*/
+	
+	
+	// We're adding student questions as cards instead.
+	firebase.database().ref('Classes/' + current_cid() + '/studentQuestions').on('value', function(snapshot) {
+		window.studentQuestions = snapshot.val();
+		// Clear container
+		var cardContainer = document.getElementById("cardContainer");
+		while (cardContainer.hasChildNodes()) {
+		    cardContainer.removeChild(cardContainer.lastChild);
+		}
+		
+		// Add unhandled question cards
+		for(questionId in window.studentQuestions) {
+			if(!window.studentQuestions[questionId].handled) {
+				var studentId = window.studentQuestions[questionId].student;
+				var questionText = window.studentQuestions[questionId].question;
+				var path = 'Classes/' + current_cid() + '/studentQuestions/' + questionId;
+				var card = createCardHTML(studentId, questionText, path);
+				document.getElementById("cardContainer").appendChild(card);
+			}
+		}
 	});
+}
+
+function createCardHTML(studentId, questionText, path) {
+	var newCard = document.createElement('div');
+	newCard.className = "card";
+	newCard.path = path;
+	newCard.innerHTML = "<h4><b>" + studentId + "</b></h4><p>" + questionText + "</p><span id='close' onclick='dismissCard(this)'>x</span>";
+	return newCard;
+}
+
+function dismissCard(cardSpan) {
+	console.log("Dismissing card: " + cardSpan.parentNode.path);
+	firebase.database().ref(cardSpan.parentNode.path).update({handled: true});
+	cardSpan.parentNode.parentNode.removeChild(cardSpan.parentNode);
 }
 
 function current_qid() {
