@@ -17,15 +17,22 @@
 </ion-header>
 
 <ion-content>
-<ion-list>
-	<ion-item *ngFor="let class of classes | async">
-	<button ion-item (click)="classSelect(class.$value)">
+
+<ion-list *ngFor="let class of classes | async">
+	<ion-item (click)="classSelect(class.$value)">
 		{{class.$value}}
-	</button>
 	</ion-item>
 </ion-list>
 
-<ion-input placeholder="Course Code" [(ngModel)]="courseCode.cc"></ion-input>
+
+
+<ion-item>
+    <ion-label>Choose a class</ion-label>
+    <ion-select [(ngModel)]="mySelect" (ionChange)='showSelectValue($event)'>
+      <ion-option *ngFor="let class of classesCanEnroll" >{{class}}</ion-option>
+    </ion-select>
+  </ion-item>
+
 <button ion-button round outline (click)="classEnroll()">Enroll</button>
 </ion-content>
 
