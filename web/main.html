@@ -43,15 +43,28 @@ LectureHall
 
 <div id="Homepage" class="tabcontent">
 <!-- <div class="header">LectureHall</div> -->
-<svg class="line"></svg>
+<div style="display: flex; flex-direction: row;">
 
-<div id="ratingsContainer" style="width: 50%">
-<canvas id="ratingsChart"></canvas>
+<div style= "flex-grow: 1;">
+  <svg class="line"></svg>
 </div>
+
+
+  <div style= "flex-grow: 1;" id="ratingsContainer" style="width: 50%">
+  <canvas id="ratingsChart"></canvas>
+  </div>
+
+
+</div>
+
+
+
+<div style="display: flex; flex-direction: row;">
 
 <div id="questionsContainer" style="width: 50%">
 <canvas id="questionsChart"></canvas>
 </div>
+
 
 <form id="myForm">
 Course Code:
@@ -66,6 +79,10 @@ Question:
     <option>Choose a Question to Display</option>
   </select>
 </form>
+
+
+
+
 <button onclick="showQuestion()">Show Question</button>
 <button onclick="removeQuestion()">Remove Question</button>
 
@@ -85,6 +102,8 @@ Question:
    <input type="text" id="wrong4" maxlength="40"><br>
    <input name="Submit"  type="submit" value="Submit"/>
 </form>
+
+</div>
 
 <div id="cardContainer"></div>
 
