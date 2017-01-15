@@ -317,7 +317,7 @@ function getQuestions() {
 				var studentId = window.studentQuestions[questionId].student;
 				var questionText = window.studentQuestions[questionId].question;
 				var path = 'Classes/' + current_cid() + '/studentQuestions/' + questionId;
-				var card = createCardHTML(studentId, questionText, path);
+				var card = createCardHTML("Student question:", questionText, path);
 				document.getElementById("cardContainer").appendChild(card);
 			}
 		}
@@ -355,17 +355,24 @@ function showQuestion() {
 		var answerTexts = [];
 		window.questionData = snapshot.val();
 		window.questionsChartData.title = window.question.text;
+		window.backgroundColors = [];
 		for(answerId in window.questionData.answers) {
 			var answerText = window.questionData.answers[answerId].text;
 			answerTexts.push(answerText);
 			
 			var users = window.questionData.answers[answerId].users;
 			window.answerCounts.push(Object.keys(users).length);
+			
+			if(window.questionData.answers[answerId].correct)
+				window.backgroundColors.push('rgba(0, 255, 0, 0.5)');
+			else
+				window.backgroundColors.push('rgba(255, 0, 0, 0.5)');
 		}
 		
 		console.log("Adding answerCountData");
 		window.questionsChartData.data = window.answerCounts;
 		window.questionsChart.data.labels = answerTexts;
+		window.questionsChartData.backgroundColor = window.backgroundColors;
 		window.questionsChart.update();
 	});
 }
@@ -423,31 +430,18 @@ function drawAverage() {
 
 function addQuestion(txt, correct, wrong1, wrong2, wrong3, wrong4) {
 	alert("Question added!");
-	question = firebase.database().ref('Classes/' + current_cid() + '/questions').push();
-	question.set({
-		text: txt
-	});
-	console.log('1')
-	question.push().set({
-		text: correct,
-		correct: true
-	});
-	question.push().set({
-		text: wrong1,
-		correct: false
-	}); 
-	question.push().set({
-		text: wrong2,
-		correct: false
-	});
-	question.push().set({
-		text: wrong3,
-		correct: false
-	});
-	question.push().set({
-		text: wrong4,
-		correct: false
-	});
+	newPostKey = firebase.database().ref('Classes/' + current_cid() + '/questions').push().key;
+
+	  var updates = {};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/text'] = txt;
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/1'] = {"correct":true,"text":correct};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/2'] = {"correct":false,"text":wrong1};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/3'] = {"correct":false,"text":wrong2};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/4'] = {"correct":false,"text":wrong3};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/5'] = {"correct":false,"text":wrong4};
+
+	  firebase.database().ref().update(updates);
+
 }
 
 function printData() {
