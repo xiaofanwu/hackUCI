@@ -16,13 +16,12 @@ LectureHall
 
 <div class="header">LectureHall</div>
 <svg class="line"></svg>
-<!-- <svg class="bar"></svg> -->
 
 <div id="ratingsContainer" style="width: 50%">
 <canvas id="ratingsChart"></canvas>
 </div>
 
-<div> id="questionsContainer" style="width: 50%">
+<div id="questionsContainer" style="width: 50%">
 <canvas id="questionsChart"></canvas>
 </div>
 
@@ -33,7 +32,6 @@ Course Code:
   </select>
 </form>
 
-<!--
 <form id="myForm">
 Question:
   <select id="selectQuestion">
@@ -42,7 +40,6 @@ Question:
 </form>
 <button onclick="showQuestion()">Show Question</button>
 <button onclick="removeQuestion()">Remove Question</button>
--->
 
 <form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
 	wrong1.value, wrong2.value, wrong3.value, wrong4.value)">  
@@ -63,6 +60,7 @@ Question:
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>

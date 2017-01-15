@@ -1,7 +1,7 @@
 function main() {
 	window.maxDataLength = 100;
 	window.rangeSize = 10;
-	window.counts = [ 1, 2, 3 ];
+	window.counts = [];
 
 	initRatingsChart();
 	initQuestionsChart();
@@ -12,7 +12,7 @@ function main() {
 
 function initRatingsChart() {
     var ctx = document.getElementById("ratingsChart");
-    window.myChart = new Chart(ctx, {
+    window.ratingsChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ["0 - 10", "10 - 20", "20 - 30", "30 - 40", "40 - 50", "50 - 60", "60 - 70", "70 - 80", "80 - 90", "90 - 100"],
@@ -43,30 +43,19 @@ function initRatingsChart() {
             }
         }
     });
-	window.myChartData = window.myChart.data.datasets[0];
+	window.ratingsChartData = window.ratingsChart.data.datasets[0];
 }
 
 function initQuestionsChart() {
     var ctx = document.getElementById("questionsChart");
-    window.myChart = new Chart(ctx, {
+	window.answerCounts = [];
+    window.questionsChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: [],
+            labels: ["Answer 1", "Answer 2", "Answer 3", "Answer 4", "Answer 5"],
 			datasets: [{
-                label: '# of Votes',
-                data: window.counts,
-	            backgroundColor: [
-	                'rgba(255, 0, 0, 0.5)',
-	                'rgba(255, 50, 0, 0.5)',
-	                'rgba(255, 100, 0, 0.5)',
-	                'rgba(255, 150, 0, 0.5)',
-					'rgba(255, 240, 0, 0.6)',
-					'rgba(255, 240, 0, 0.6)',
-					'rgba(150, 255, 0, 0.5)',
-					'rgba(100, 255, 0, 0.5)',
-					'rgba(50, 255, 0, 0.5)',
-					'rgba(0, 255, 0, 0.5)'
-	            ]
+                label: '# of Students',
+                data: window.answerCounts
             }]
         },
         options: {
@@ -79,7 +68,7 @@ function initQuestionsChart() {
             }
         }
     });
-	window.myChartData = window.myChart.data.datasets[0];
+	window.questionsChartData = window.questionsChart.data.datasets[0];
 }
 
 function drawGraph() {	
@@ -160,8 +149,8 @@ function getCurrentRatingsAndDrawInstant() {
 			window.counts.push(0);
 		
 		console.log("Counts: " + window.counts);
-		window.myChartData.data = window.counts;
-		window.myChart.update();
+		window.ratingsChartData.data = window.counts;
+		window.ratingsChart.update();
 		
 	} else {
 		//console.log("Getting ratings for: " + classId);
@@ -173,10 +162,9 @@ function getCurrentRatingsAndDrawInstant() {
 			}
 			
 			//console.log("Ratings = " + ratings);
-			window.counts = getCounts(ratings);
-			
-			window.myChartData.data = window.counts;
-			window.myChart.update();
+			window.counts = getCounts(ratings);			
+			window.ratingsChartData.data = window.counts;
+			window.ratingsChart.update();
 		});
 	}
 	console.log("Counts: " + window.counts.length)
@@ -273,15 +261,14 @@ function getQuestions() {
 	drawGraph();
 	firebase.database().ref('Classes/' + current_cid() + '/questions').once('value').then(function(snapshot) {
 		var qids = Object.keys(snapshot.val());
-		
-		/*var select = document.getElementById("selectQuestion"); 
+		var select = document.getElementById("selectQuestion"); 
 		for(var i = 0; i < qids.length; i++) {
 		    var opt = qids[i];
 		    var el = document.createElement("option");
 		    el.textContent = opt;
 		    el.value = opt;
 		    select.appendChild(el);
-		}*/
+		}
 	});
 }
 
@@ -293,6 +280,21 @@ function current_qid() {
 function showQuestion() {
 	firebase.database().ref('Classes/' + current_cid()).update({
 		current:current_qid()
+	});
+	
+	var questionRef = firebase.database().ref('Classes/' + current_cid() + '/questions/' + current_qid());
+	window.questionData = [];
+	questionRef.once('value').then(function(snapshot) {
+		window.answerCounts = [];
+		window.questionData = snapshot.val();
+		for(answerId in window.questionData.answers) {
+			var users = window.questionData.answers[answerId].users;
+			window.answerCounts.push(Object.keys(users).length);
+		}
+		
+		console.log("Adding answerCountData");
+		window.questionsChartData.data = window.answerCounts;
+		window.questionsChart.update();
 	});
 }
 
