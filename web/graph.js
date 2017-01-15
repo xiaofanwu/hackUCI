@@ -1,5 +1,5 @@
 function main() {
-	window.maxDataLength = 10;
+	window.maxDataLength = 100;
 	getClasses();
 	drawGraph();
 }
@@ -22,20 +22,31 @@ function drawGraph() {
 		
 		window.currentRef = firebase.database().ref('/Classes/' + classId + '/Students');	
 		window.currentRef.on('value', function(snapshot) {
-			var totalStudents = snapshot.numChildren();
-			console.log(totalStudents);
 			var sumRating = 0;
+			var totalWeight = 0;
 			snapshot.forEach(function(childSnapshot) {
-				var childData = childSnapshot.child("rating").val();
+				var rating = childSnapshot.child("rating").val();
+				var timestamp = childSnapshot.child("timestamp").val();
 
-				sumRating += childData;
+				// Decrease weighting by a factor of 2 every five minutes
+				var weight;
+				if((Date.now() / 1000.0 - timestamp) < 30000) {
+					weight = Math.pow(2, (timestamp - Date.now() / 1000.0) / 300.0);
+				} else {
+					weight = Math.pow(2, -100);
+				}
+
+				sumRating += rating * weight;
+				totalWeight += weight;
+				console.log(rating + ", " + (Date.now() / 1000.0 - timestamp) + ", " + weight);
+				console.log(Date.now() / 1000);
 			});
 
 			while(window.data.length < window.maxDataLength) {
 				var newItem = {time: (Date.now() / 1000) + (window.data.length - window.maxDataLength), val: 0};
 				window.data.push(newItem);
 			}
-			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalStudents)});
+			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalWeight )});
 			
 			update();
 			drawAverage();
