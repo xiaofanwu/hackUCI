@@ -430,31 +430,18 @@ function drawAverage() {
 
 function addQuestion(txt, correct, wrong1, wrong2, wrong3, wrong4) {
 	alert("Question added!");
-	question = firebase.database().ref('Classes/' + current_cid() + '/questions').push();
-	question.set({
-		text: txt
-	});
-	console.log('1')
-	question.push().set({
-		text: correct,
-		correct: true
-	});
-	question.push().set({
-		text: wrong1,
-		correct: false
-	}); 
-	question.push().set({
-		text: wrong2,
-		correct: false
-	});
-	question.push().set({
-		text: wrong3,
-		correct: false
-	});
-	question.push().set({
-		text: wrong4,
-		correct: false
-	});
+	newPostKey = firebase.database().ref('Classes/' + current_cid() + '/questions').push().key;
+
+	  var updates = {};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/text'] = txt;
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/1'] = {"correct":true,"text":correct};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/2'] = {"correct":false,"text":wrong1};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/3'] = {"correct":false,"text":wrong2};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/4'] = {"correct":false,"text":wrong3};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/5'] = {"correct":false,"text":wrong4};
+
+	  firebase.database().ref().update(updates);
+
 }
 
 function printData() {
