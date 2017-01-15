@@ -23,10 +23,11 @@ export class TabsPage {
   enroll: any;
   selected:String;
   classesCanEnroll: string[] = [];
-  courseCode = {cc:''}
+  courseCode = {cc:''};
   classEnrolled:string[] = [];
 
   constructor(public navCtrl: NavController, public af: AngularFire,public modalCtrl: ModalController) {
+    console.log(this.af.auth.getAuth().uid,"authid****");
   	this.classes = af.database.list('/Users/' + this.af.auth.getAuth().uid + '/Enrolled');
     this.classesAvailable = af.database.list('/Classes');
 
@@ -83,7 +84,8 @@ export class TabsPage {
   logout(){
     console.log("here,logout");
     this.af.auth.logout();
-    this.navCtrl.push(LoginPage);
+    this.navCtrl.pop();
+    // this.navCtrl.push(LoginPage);
   }
 
   classSelect(cid:any) {
