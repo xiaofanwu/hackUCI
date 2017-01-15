@@ -355,17 +355,24 @@ function showQuestion() {
 		var answerTexts = [];
 		window.questionData = snapshot.val();
 		window.questionsChartData.title = window.question.text;
+		window.backgroundColors = [];
 		for(answerId in window.questionData.answers) {
 			var answerText = window.questionData.answers[answerId].text;
 			answerTexts.push(answerText);
 			
 			var users = window.questionData.answers[answerId].users;
 			window.answerCounts.push(Object.keys(users).length);
+			
+			if(window.questionData.answers[answerId].correct)
+				window.backgroundColors.push('rgba(0, 255, 0, 0.5)');
+			else
+				window.backgroundColors.push('rgba(255, 0, 0, 0.5)');
 		}
 		
 		console.log("Adding answerCountData");
 		window.questionsChartData.data = window.answerCounts;
 		window.questionsChart.data.labels = answerTexts;
+		window.questionsChartData.backgroundColor = window.backgroundColors;
 		window.questionsChart.update();
 	});
 }
