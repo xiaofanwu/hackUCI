@@ -38,7 +38,6 @@ form {
 	left:40px;
 }
 
-
 /* Style the list */
 ul.tab {
     list-style-type: none;
@@ -47,18 +46,28 @@ ul.tab {
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: steelblue;
-    //background-color: #f1f1f1;
+    /*//background-color: #f1f1f1;*/
+    position: relative;
+}
+
+ul.tab li {
+/*    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);*/
 }
 
 /* Float the list items side by side */
-ul.tab li {float: right;}
+ul.tab li.right {
+    float: right;
+    /*transform: translateY(-50%);*/
+}
 
 ul.tab li.left {
     display: inline-block;
     color: white;
     text-align: center;
     padding: 14px 16px;
-    float:left;
+    float: left;
     font-size: 24px;
 }
 
