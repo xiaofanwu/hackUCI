@@ -73,16 +73,21 @@ export class AboutPage {
     });
   }
 
+
+  ionViewDidLeave(){
+    this.question.off()
+
+}
+
   submitQuestion() {
 
     let studentConcern = firebase.database().ref('Classes/' + this.navParams.get('cid') + '/studentQuestions').push();
-
     studentConcern.set({
       question: this.studentQuestion,
       handled: false,
       student: this.userID
     })
-
+  this.studentQuestion='';
   }
 
 }

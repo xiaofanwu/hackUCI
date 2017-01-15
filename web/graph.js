@@ -265,6 +265,7 @@ function getQuestions() {
 	drawGraph();
 	var allGeoData = [];
 
+	// TODO: Fix spelling to Attendance
 	firebase.database().ref('Classes/' + current_cid() + '/Attendence').on('value',function(snapshot) {
 	   snapshot.forEach(function(childSnapshot) {
 		      var key = childSnapshot.key;
@@ -434,11 +435,11 @@ function addQuestion(txt, correct, wrong1, wrong2, wrong3, wrong4) {
 
 	  var updates = {};
 	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/text'] = txt;
-	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/1'] = {"correct":true,"text":correct};
-	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/2'] = {"correct":false,"text":wrong1};
-	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/3'] = {"correct":false,"text":wrong2};
-	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/4'] = {"correct":false,"text":wrong3};
-	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answer' + '/5'] = {"correct":false,"text":wrong4};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answers' + '/1'] = {"correct":true,"text":correct};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answers' + '/2'] = {"correct":false,"text":wrong1};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answers' + '/3'] = {"correct":false,"text":wrong2};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answers' + '/4'] = {"correct":false,"text":wrong3};
+	  updates['Classes/' + current_cid() + '/questions/' + newPostKey + '/answers' + '/5'] = {"correct":false,"text":wrong4};
 
 	  firebase.database().ref().update(updates);
 

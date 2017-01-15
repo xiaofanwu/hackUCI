@@ -48,35 +48,101 @@ LectureHall
 
 <div id="Homepage" class="tabcontent">
 <!-- <div class="header">LectureHall</div> -->
-<svg class="line"></svg>
-
-<div id="ratingsContainer" style="width: 50%">
-<canvas id="ratingsChart"></canvas>
+<div style="display: flex; flex-direction: row;">
+<div style= "flex-grow: 1;">
+  <svg class="line"></svg>
 </div>
+
+  <div style= "flex-grow: 1;" id="ratingsContainer" style="width: 50%">
+  <canvas id="ratingsChart"></canvas>
+  </div>
+</div>
+
+
+
+<div style="display: flex; flex-direction: row;">
 
 <div id="questionsContainer" style="width: 50%">
 <canvas id="questionsChart"></canvas>
 </div>
 
-<form id="myForm">
-Course Code:
-  <select id="selectClass" onChange="getQuestions();">
-    <option>Choose a Course</option>
-  </select>
-</form>
+<div style="display: flex; flex-direction: column; flex-grow: 1;">
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
+  <form id="myForm">
+  Course Code:
+    <select id="selectClass" onChange="getQuestions();">
+      <option>Choose a Course</option>
+    </select>
+  </form>
+  </div>
 
-<form id="myForm">
-Question:
-  <select id="selectQuestion">
-    <option>Choose a Question to Display</option>
-  </select>
-</form>
-<button onclick="showQuestion()">Show Question</button>
-<button onclick="removeQuestion()">Remove Question</button>
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
+  <form id="myForm">
+  Question:
+    <select id="selectQuestion">
+      <option>Choose a Question to Display</option>
+    </select>
+  </form>
+  </div>
 
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
+    </div>
+
+
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
+  <button onclick="showQuestion()">Show Question</button>
+  </div>
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
+  <button onclick="removeQuestion()">Remove Question</button>
+  </div>
+</div>
+
+
+
+
+
+</div>
+
+<div style="display: flex; flex-direction: row;">
+
+<div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;display: flex; flex-direction: column; flex-wrap: wrap;" >
+<div id="cardContainer"></div>
+</div>
+
+
+
+<div style= "flex-grow: 1; text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0;">
 <form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
-	wrong1.value, wrong2.value, wrong3.value, wrong4.value)">  
-	Question text:
+  wrong1.value, wrong2.value, wrong3.value, wrong4.value)">  
+  Question text:
    <input type="text" id="question" maxlength="40"><br>
    Correct answer: 
    <input type="text" id="correct" maxlength="40"><br>
@@ -88,10 +154,13 @@ Question:
    <input type="text" id="wrong3" maxlength="40"><br>
    Fourth wrong answer:
    <input type="text" id="wrong4" maxlength="40"><br>
-   <input name="Submit"  type="submit" value="Submit"/>
+   <input name="Submit"  type="submit" value="Submit" align="center"/>
 </form>
+</div>
 
-<div id="cardContainer"></div>
+
+</div>
+
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
