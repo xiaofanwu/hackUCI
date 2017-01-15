@@ -14,7 +14,8 @@ export class AboutPage {
 
 
   rating:any
-  item:any
+  ratingTimestamp: any
+  ratingItem:any
   userID:any
   question:any
   check:any
@@ -32,8 +33,12 @@ export class AboutPage {
     const itemObservable = this.af.database.object('/item');
     //console.log(itemObservable);
     //console.log(this.rating);
-    this.item = this.af.database.object('/Classes/' + this.navParams.get('cid') + '/Students/'+this.userID+'/rating', { preserveSnapshot: true });
-    this.item.set(this.rating);
+    this.ratingItem = this.af.database.object('/Classes/' + this.navParams.get('cid') + '/Students/'+this.userID+'/rating', { preserveSnapshot: true });
+    this.ratingItem.set(this.rating);
+	
+	this.ratingTimestamp = this.af.database.object('/Classes/' + this.navParams.get('cid') + '/Students/' + this.userID + '/timestamp', {preserveSnapshot: true});
+	this.ratingTimestamp.set(Date.now() / 1000);
+	
     //this.item.subscribe(snapshot => {
     //  console.log(snapshot.key)
     //  console.log(snapshot.val())

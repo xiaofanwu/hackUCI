@@ -5,6 +5,16 @@ body {
   font: 12px Arial;
 }
 
+div.header {
+	width: 100%;
+	height: 50px;
+	background: navy;
+	font:40px Verdana;
+	color: white;
+	text-align: left;
+	text-indent: 50px;
+}
+
 path { 
     stroke: steelblue;
     stroke-width: 2;

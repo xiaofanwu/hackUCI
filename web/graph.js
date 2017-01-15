@@ -1,5 +1,5 @@
 function main() {
-	window.maxDataLength = 10;
+	window.maxDataLength = 100;
 	getClasses();
 	drawGraph();
 }
