@@ -1,6 +1,42 @@
 function main() {
 	window.maxDataLength = 100;
 	window.rangeSize = 10;
+	window.counts = [ 1, 2, 3 ];
+
+    var ctx = document.getElementById("ratingsChart");
+    window.myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["0 - 10", "10 - 20", "20 - 30", "30 - 40", "40 - 50", "50 - 60", "60 - 70", "70 - 80", "80 - 90", "90 - 100"],
+			datasets: [{
+                label: '# of Votes',
+                data: window.counts,
+	            backgroundColor: [
+	                'rgba(255, 0, 0, 0.2)',
+	                'rgba(255, 0, 0, 0.2)',
+	                'rgba(200, 55, 0, 0.2)',
+	                'rgba(200, 55, 0, 0.2)',
+					'rgba(125, 125, 0, 0.2)',
+					'rgba(125, 125, 0, 0.2)',
+					'rgba(55, 200, 0, 0.2)',
+					'rgba(55, 200, 0, 0.2)',
+					'rgba(0, 255, 0, 0.2)',
+					'rgba(0, 255, 0, 0.2)'
+	            ]
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+	window.myChartData = window.myChart.data.datasets[0];
+	
 	getClasses();
 	drawGraph();
 }
@@ -68,7 +104,8 @@ function drawGraph() {
 
 function update() {
 	d3.select("svg.line").selectAll("*").remove();
-	d3.select("svg.bar").selectAll("*").remove();
+	//d3.select("svg.bar").selectAll("*").remove();
+	
 	if(window.data.length > window.maxDataLength)
 		window.data.shift();
 }
@@ -78,11 +115,15 @@ function getCurrentRatingsAndDrawInstant() {
 	if(classId == "Choose a Course") {
 		console.log("Default course");
 		window.counts = [];
-		for(var i = 0; i <= window.maxVal / window.rangeSize; i++)
+		for(var i = 0; i < window.maxVal / window.rangeSize; i++)
 			window.counts.push(0);
-		drawInstant();
+		
+		console.log("Counts: " + window.counts);
+		window.myChartData.data = window.counts;
+		window.myChart.update();
+		
 	} else {
-		console.log("Getting ratings for: " + classId);
+		//console.log("Getting ratings for: " + classId);
 		firebase.database().ref('/Classes/' + classId + '/Students').once('value').then(function(snapshot) {
 			window.studentData = snapshot.val();
 			var ratings = [];
@@ -90,23 +131,30 @@ function getCurrentRatingsAndDrawInstant() {
 				ratings.push(window.studentData[studentId].rating);
 			}
 			
-			console.log("Ratings = " + ratings);
+			//console.log("Ratings = " + ratings);
 			window.counts = getCounts(ratings);
-			drawInstant();
+			
+			window.myChartData.data = window.counts;
+			window.myChart.update();
 		});
 	}
 	console.log("Counts: " + window.counts.length)
 }
 
 function getCounts(data) {
-	var counts = {};
+	var countObject = {};
 	for (var i = 0; i <= window.maxVal / window.rangeSize; i++)
-		counts[i] = 0;
+		countObject[i] = 0;
 
 	for(var i = 0; i < data.length; i++)
-		counts[data[i] / window.rangeSize] += 1;
+		countObject[data[i] / window.rangeSize] += 1;
 	
-	return counts;
+	var countsArray = [];
+	for(var i = 0; i < window.maxVal / window.rangeSize; i++)
+		countsArray.push(counts[i])
+		
+	countsArray[(window.maxVal / window.rangeSize) - 1] += countObject[window.maxVal / window.rangeSize];
+	return countsArray;
 }
 
 function drawInstant() {
