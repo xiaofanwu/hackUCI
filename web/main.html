@@ -27,7 +27,7 @@ LectureHall
   <li class="left"><img src="img/logo.png"/></li>
   <li class="left">LectureHall</li>
   <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Homepage')" id="defaultOpen">Homepage</a></li>  
-  <li><a href="test.html" class="tablinks" onclick="openCity(event, 'Map')">Map</a></li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Map')">Map</a></li>
 </ul>
 
 <body>
@@ -44,11 +44,9 @@ LectureHall
 <div id="Homepage" class="tabcontent">
 <!-- <div class="header">LectureHall</div> -->
 <div style="display: flex; flex-direction: row;">
-
 <div style= "flex-grow: 1;">
   <svg class="line"></svg>
 </div>
-
 
   <div style= "flex-grow: 1;" id="ratingsContainer" style="width: 50%">
   <canvas id="ratingsChart"></canvas>
@@ -62,15 +60,13 @@ LectureHall
 <div id="questionsContainer" style="width: 50%">
 <canvas id="questionsChart"></canvas>
 </div>
-<div id="cardContainer"></div>
-
-
-</div>
-
-<div style="display: flex; flex-direction: row;">
 
 <div style="display: flex; flex-direction: column; flex-grow: 1;">
-  <div style= "flex-grow: 1;">
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
   <form id="myForm">
   Course Code:
     <select id="selectClass" onChange="getQuestions();">
@@ -79,7 +75,11 @@ LectureHall
   </form>
   </div>
 
-  <div style= "flex-grow: 1;">
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
   <form id="myForm">
   Question:
     <select id="selectQuestion">
@@ -88,10 +88,26 @@ LectureHall
   </form>
   </div>
 
-  <div style= "flex-grow: 1;">
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
+    </div>
+
+
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
   <button onclick="showQuestion()">Show Question</button>
   </div>
-  <div style= "flex-grow: 1;">
+  <div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;">
   <button onclick="removeQuestion()">Remove Question</button>
   </div>
 </div>
@@ -99,7 +115,26 @@ LectureHall
 
 
 
-<div style= "flex-grow: 1;">
+
+</div>
+
+<div style="display: flex; flex-direction: row;">
+
+
+<div style= "text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0; flex-grow: 1;" id="cardContainer"></div>
+
+
+
+
+<div style= "flex-grow: 1; text-align: center;
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom:0;">
 <form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
   wrong1.value, wrong2.value, wrong3.value, wrong4.value)">  
   Question text:
