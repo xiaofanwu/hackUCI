@@ -1,6 +1,5 @@
 function main() {
 	window.maxDataLength = 100;
-	window.rangeSize = 10;
 	getClasses();
 	drawGraph();
 }
@@ -73,12 +72,23 @@ function update() {
 		window.data.shift();
 }
 
+function getCounts(data) {
+	var counts = {};
+	for (var i = 0; i <= window.maxVal; i++)
+		counts[i] = 0;
+
+	for(var i = 0; i < data.length; i++)
+		counts[data[i]] += 1;
+	
+	return counts;
+}
+
 function getCurrentRatingsAndDrawInstant() {
 	var classId = current_cid();
 	if(classId == "Choose a Course") {
 		console.log("Default course");
 		window.counts = [];
-		for(var i = 0; i <= window.maxVal / window.rangeSize; i++)
+		for(var i = 0; i <= window.maxVal; i++)
 			window.counts.push(0);
 		drawInstant();
 	} else {
@@ -95,24 +105,12 @@ function getCurrentRatingsAndDrawInstant() {
 			drawInstant();
 		});
 	}
-	console.log("Counts: " + window.counts.length)
-}
-
-function getCounts(data) {
-	var counts = {};
-	for (var i = 0; i <= window.maxVal / window.rangeSize; i++)
-		counts[i] = 0;
-
-	for(var i = 0; i < data.length; i++)
-		counts[data[i] / window.rangeSize] += 1;
-	
-	return counts;
 }
 
 function drawInstant() {
 	// Set counts
 	console.log("Drawing instant graph");
-	window.barWidth = (window.widthInstant * window.rangeSize) / window.maxVal;
+	var barWidth = window.widthInstant / window.maxVal;
 
 	var x = d3.scale.linear().range([0, window.widthInstant]);
 	var y = d3.scale.linear().range([window.height, 0]);
@@ -133,12 +131,12 @@ function drawInstant() {
     x.domain([0, window.maxVal + 1]);
 	y.domain([0, 100]);
 
-	for(var i = 0; i <= window.maxVal / window.rangeSize; i++) {
+	for(var i = 0; i <= window.maxVal; i++) {
 		var bar = chart.append("rect")
-			.attr("x", i * window.barWidth)
-			.attr("y", window.height - 10 * window.counts[i])
-	    	.attr("width", window.barWidth - 1)
-	    	.attr("height", 10 * window.counts[i]);
+			.attr("x", i * barWidth)
+			.attr("y", window.height - 100 * window.counts[i])
+	    	.attr("width", barWidth - 1)
+	    	.attr("height", 100 * window.counts[i]);
 	}
 	
 	// TODO: These tick marks exist, but they are not all visible,
@@ -177,9 +175,60 @@ function current_cid() {
 	return e.options[e.selectedIndex].value;
 }
 
+function initMap() {
+console.log("came here$$$");
+
+window.map = new google.maps.Map(document.getElementById('map'), {
+  zoom: 13,
+  center: {lat:33.645278, lng: -117.831287}
+});
+
+// Create an array of alphabetical characters used to label the markers.
+
+// Add some markers to the map.
+// Note: The code uses the JavaScript Array.prototype.map() method to
+// create an array of markers based on a given "locations" array.
+// The map() method here has nothing to do with the Google Maps API.
+
+}
+
+function addMarker(locations){
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		console.log(locations);
+
+	var markers = locations.map(function(location, i) {
+  return new google.maps.Marker({
+    position: location,
+    label: labels[i % labels.length]
+  });
+});
+
+// Add a marker clusterer to manage the markers.
+var markerCluster = new MarkerClusterer(window.map, markers,
+    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+}
+
+
 function getQuestions() {
-	console.log("Got the questions")
+	console.log(current_cid(),"classid****");
+	console.log("Got the questions");
 	drawGraph();
+	var allGeoData = [];
+
+	firebase.database().ref('Classes/' + current_cid() + '/Attendence').on('value',function(snapshot){
+
+	   snapshot.forEach(function(childSnapshot) {
+		      var key = childSnapshot.key;
+		      // childData will be the actual contents of the child
+		      var childData = childSnapshot.val();
+		      console.log(childData);
+		      console.log(childData["lat"]);
+		      allGeoData.push(childData);
+		      console.log(allGeoData,"ALLgEOdATA");
+		  });
+	   addMarker(allGeoData);
+});
+
 	firebase.database().ref('Classes/' + current_cid() + '/questions').once('value').then(function(snapshot) {
 		var qids = Object.keys(snapshot.val());
 		
@@ -258,11 +307,11 @@ function drawAverage() {
 
 function getCounts(data) {
 	var counts = {};
-	for (i = 0; i <= window.maxVal / window.rangeSize; i++)
+	for (i = 0; i <= window.maxVal; i++)
 		counts[i] = 0;
 
 	for(i = 0; i < data.length; i++)
-		counts[parseInt(data[i] / window.rangeSize)] += 1;
+		counts[data[i]] += 1;
 	
 	return counts;
 }

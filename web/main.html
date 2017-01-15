@@ -4,6 +4,19 @@
 <title>
 LectureHall
 </title>
+ <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 30%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -13,6 +26,13 @@ LectureHall
 <!-- <ul>
   <li><a href="#home">LectureHall</a></li>
 </ul> -->
+<div id="map"></div>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWNU9d07vv6-O7ggJy21GkL-Pv1kOEKjQ&callback=initMap">
+    </script>
+    
 
 <div class="header">LectureHall</div>
 <svg class="line"></svg>
@@ -24,6 +44,8 @@ Course Code:
     <option>Choose a Course</option>
   </select>
 </form>
+
+
 
 <div id="container" style="width: 20%">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
