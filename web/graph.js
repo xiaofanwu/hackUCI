@@ -265,6 +265,7 @@ function getQuestions() {
 	drawGraph();
 	var allGeoData = [];
 
+	// TODO: Fix spelling to Attendance
 	firebase.database().ref('Classes/' + current_cid() + '/Attendence').on('value',function(snapshot) {
 	   snapshot.forEach(function(childSnapshot) {
 		      var key = childSnapshot.key;
