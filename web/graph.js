@@ -317,7 +317,7 @@ function getQuestions() {
 				var studentId = window.studentQuestions[questionId].student;
 				var questionText = window.studentQuestions[questionId].question;
 				var path = 'Classes/' + current_cid() + '/studentQuestions/' + questionId;
-				var card = createCardHTML(studentId, questionText, path);
+				var card = createCardHTML("Student question:", questionText, path);
 				document.getElementById("cardContainer").appendChild(card);
 			}
 		}
