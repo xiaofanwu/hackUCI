@@ -74,9 +74,11 @@ export class TabsPage {
   showSelectValue(mySelect) {
     this.selected = mySelect;
   }
+  
   deleteClass(cid:any){
-    console.log("delete does not work");
-    let toBeDeleted = this.af.database.object('/Users/' + this.userID + '/Enrolled');
+    console.log("delete does not work",cid.$key);
+    let toBeDeleted = this.af.database.object('/Users/' + this.userID + '/Enrolled' + cid.$key);
+    toBeDeleted.remove().then(_ => console.log('deleted!!!!!!'));
 
   }
 
