@@ -53,7 +53,7 @@ function initQuestionsChart() {
     window.questionsChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Answer 1", "Answer 2", "Answer 3", "Answer 4", "Answer 5"],
+            labels: [],
 			datasets: [{
                 label: '# of Students',
                 data: window.answerCounts
@@ -202,52 +202,6 @@ function getCounts(data) {
 	return countsArray;
 }
 
-function drawInstant() {
-	// Set counts
-	console.log("Drawing instant graph");
-	var barWidth = window.widthInstant / window.maxVal;
-
-	var x = d3.scale.linear().range([0, window.widthInstant]);
-	var y = d3.scale.linear().range([window.height, 0]);
-
-	var chart = d3.select("svg.bar")
-	        .attr("width", window.widthAverage + window.margin.left + window.margin.right)
-	        .attr("height", window.height + window.margin.top + window.margin.bottom)
-	    .append("g")
-	        .attr("transform", 
-				"translate(" + window.margin.left + "," + window.margin.top + ")");
-	
-	// Define the axes
-	var xAxis = d3.svg.axis().scale(x)
-	    .orient("bottom").ticks(5);
-	var yAxis = d3.svg.axis().scale(y)
-	    .orient("left").ticks(5);
-	
-    x.domain([0, window.maxVal + 1]);
-	y.domain([0, 100]);
-
-	for(var i = 0; i <= window.maxVal; i++) {
-		var bar = chart.append("rect")
-			.attr("x", i * barWidth)
-			.attr("y", window.height - 100 * window.counts[i])
-	    	.attr("width", barWidth - 1)
-	    	.attr("height", 100 * window.counts[i]);
-	}
-	
-	// TODO: These tick marks exist, but they are not all visible,
-	// and none of the labels are visible.
-	// Add the X Axis
-	chart.append("g")
-	    .attr("class", "x axis")
-	    .attr("transform", "translate(0," + height + ")")
-	    .call(xAxis);
-
-	// Add the Y Axis
-	chart.append("g")
-	    .attr("class", "y axis")
-	    .call(yAxis);
-}
-
 // Gets all available courses and adds them to the dropdown selector
 function getClasses() {
 	//document.getElementById('selectClass').options.length = 0;
@@ -271,11 +225,11 @@ function current_cid() {
 }
 
 function initMap() {
-console.log("came here$$$");
+	console.log("came here$$$");
 
-window.map = new google.maps.Map(document.getElementById('map'), {
-  zoom: 13,
-  center: {lat:33.645278, lng: -117.831287}
+	window.map = new google.maps.Map(document.getElementById('map'), {
+	  zoom: 13,
+	  center: {lat:33.645278, lng: -117.831287}
 });
 
 // Create an array of alphabetical characters used to label the markers.
@@ -288,19 +242,19 @@ window.map = new google.maps.Map(document.getElementById('map'), {
 }
 
 function addMarker(locations){
-var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		console.log(locations);
+	var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			console.log(locations);
 
 	var markers = locations.map(function(location, i) {
-  return new google.maps.Marker({
-    position: location,
-    label: labels[i % labels.length]
-  });
-});
+		return new google.maps.Marker({
+    		position: location,
+    		label: labels[i % labels.length]
+  		});
+	});
 
-// Add a marker clusterer to manage the markers.
-var markerCluster = new MarkerClusterer(window.map, markers,
-    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+	// Add a marker clusterer to manage the markers.
+	var markerCluster = new MarkerClusterer(window.map, markers,
+	    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 }
 
 
@@ -322,7 +276,7 @@ function getQuestions() {
 		      console.log(allGeoData,"ALLgEOdATA");
 		  });
 	   addMarker(allGeoData);
-});
+	});
 
 	firebase.database().ref('Classes/' + current_cid() + '/questions').once('value').then(function(snapshot) {
 		var qids = Object.keys(snapshot.val());
@@ -351,14 +305,20 @@ function showQuestion() {
 	window.questionData = [];
 	questionRef.once('value').then(function(snapshot) {
 		window.answerCounts = [];
+		var answerTexts = [];
 		window.questionData = snapshot.val();
+		window.questionsChartData.title = window.question.text;
 		for(answerId in window.questionData.answers) {
+			var answerText = window.questionData.answers[answerId].text;
+			answerTexts.push(answerText);
+			
 			var users = window.questionData.answers[answerId].users;
 			window.answerCounts.push(Object.keys(users).length);
 		}
 		
 		console.log("Adding answerCountData");
 		window.questionsChartData.data = window.answerCounts;
+		window.questionsChart.data.labels = answerTexts;
 		window.questionsChart.update();
 	});
 }
@@ -394,7 +354,6 @@ function drawAverage() {
 				
     // Scale the range of the data
     x.domain(d3.extent(window.data, function(d) { return d.time; }));
-    //y.domain([0, d3.max(window.data, function(d) { return d.val; })]);
 	y.domain([0, window.maxVal]);
 
     // Add the valueline path.
@@ -468,9 +427,3 @@ function openCity(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-
-
-
-
-
-
