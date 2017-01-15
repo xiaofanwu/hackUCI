@@ -11,9 +11,13 @@
 </ul> -->
 
 <ion-header>
- 
-  <ion-navbar>
+
+  <ion-navbar hideBackButton>
     <ion-title>My Classes</ion-title>
+        <ion-buttons>
+        <button ion-button icon-only (click)="logout()"><ion-icon name="log-out"></ion-icon></button>
+    </ion-buttons>
+
     <ion-buttons end>
         <button ion-button icon-only (click)="presentModal()"><ion-icon name="add"></ion-icon></button>
     </ion-buttons>

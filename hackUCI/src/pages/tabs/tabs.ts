@@ -6,6 +6,7 @@ import { ContactPage } from '../contact/contact';
 import { NavController } from 'ionic-angular';
 import { ModalController,Modal } from 'ionic-angular';
 import { AddClassPage } from '../add-class/add-class';
+import {LoginPage} from "../login/login";
 
 @Component({
   templateUrl: 'tabs.html'
@@ -78,6 +79,12 @@ export class TabsPage {
 
   }
 
+
+  logout(){
+    console.log("here,logout");
+    this.af.auth.logout();
+    this.navCtrl.push(LoginPage);
+  }
 
   classSelect(cid:any) {
   	this.navCtrl.push(AboutPage, {
