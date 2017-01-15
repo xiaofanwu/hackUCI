@@ -12,16 +12,16 @@ function main() {
                 label: '# of Votes',
                 data: window.counts,
 	            backgroundColor: [
-	                'rgba(255, 0, 0, 0.2)',
-	                'rgba(255, 0, 0, 0.2)',
-	                'rgba(200, 55, 0, 0.2)',
-	                'rgba(200, 55, 0, 0.2)',
-					'rgba(125, 125, 0, 0.2)',
-					'rgba(125, 125, 0, 0.2)',
-					'rgba(55, 200, 0, 0.2)',
-					'rgba(55, 200, 0, 0.2)',
-					'rgba(0, 255, 0, 0.2)',
-					'rgba(0, 255, 0, 0.2)'
+	                'rgba(255, 0, 0, 0.5)',
+	                'rgba(255, 50, 0, 0.5)',
+	                'rgba(255, 100, 0, 0.5)',
+	                'rgba(255, 150, 0, 0.5)',
+					'rgba(255, 240, 0, 0.6)',
+					'rgba(255, 240, 0, 0.6)',
+					'rgba(150, 255, 0, 0.5)',
+					'rgba(100, 255, 0, 0.5)',
+					'rgba(50, 255, 0, 0.5)',
+					'rgba(0, 255, 0, 0.5)'
 	            ]
             }]
         },
@@ -147,11 +147,13 @@ function getCounts(data) {
 		countObject[i] = 0;
 
 	for(var i = 0; i < data.length; i++)
-		countObject[data[i] / window.rangeSize] += 1;
+		countObject[parseInt(data[i] / window.rangeSize)] += 1;
+	
+	console.log(countObject);
 	
 	var countsArray = [];
 	for(var i = 0; i < window.maxVal / window.rangeSize; i++)
-		countsArray.push(counts[i])
+		countsArray.push(countObject[i]);
 		
 	countsArray[(window.maxVal / window.rangeSize) - 1] += countObject[window.maxVal / window.rangeSize];
 	return countsArray;
@@ -302,17 +304,6 @@ function drawAverage() {
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
-}
-
-function getCounts(data) {
-	var counts = {};
-	for (i = 0; i <= window.maxVal / window.rangeSize; i++)
-		counts[i] = 0;
-
-	for(i = 0; i < data.length; i++)
-		counts[parseInt(data[i] / window.rangeSize)] += 1;
-	
-	return counts;
 }
 
 function addQuestion(txt, correct, wrong1, wrong2, wrong3, wrong4) {
