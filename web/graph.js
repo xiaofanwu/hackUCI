@@ -1,5 +1,6 @@
 function main() {
 	window.maxDataLength = 100;
+	window.rangeSize = 10;
 	getClasses();
 	drawGraph();
 }
@@ -72,23 +73,12 @@ function update() {
 		window.data.shift();
 }
 
-function getCounts(data) {
-	var counts = {};
-	for (var i = 0; i <= window.maxVal; i++)
-		counts[i] = 0;
-
-	for(var i = 0; i < data.length; i++)
-		counts[data[i]] += 1;
-	
-	return counts;
-}
-
 function getCurrentRatingsAndDrawInstant() {
 	var classId = current_cid();
 	if(classId == "Choose a Course") {
 		console.log("Default course");
 		window.counts = [];
-		for(var i = 0; i <= window.maxVal; i++)
+		for(var i = 0; i <= window.maxVal / window.rangeSize; i++)
 			window.counts.push(0);
 		drawInstant();
 	} else {
@@ -105,12 +95,24 @@ function getCurrentRatingsAndDrawInstant() {
 			drawInstant();
 		});
 	}
+	console.log("Counts: " + window.counts.length)
+}
+
+function getCounts(data) {
+	var counts = {};
+	for (var i = 0; i <= window.maxVal / window.rangeSize; i++)
+		counts[i] = 0;
+
+	for(var i = 0; i < data.length; i++)
+		counts[data[i] / window.rangeSize] += 1;
+	
+	return counts;
 }
 
 function drawInstant() {
 	// Set counts
 	console.log("Drawing instant graph");
-	var barWidth = window.widthInstant / window.maxVal;
+	window.barWidth = (window.widthInstant * window.rangeSize) / window.maxVal;
 
 	var x = d3.scale.linear().range([0, window.widthInstant]);
 	var y = d3.scale.linear().range([window.height, 0]);
@@ -131,12 +133,12 @@ function drawInstant() {
     x.domain([0, window.maxVal + 1]);
 	y.domain([0, 100]);
 
-	for(var i = 0; i <= window.maxVal; i++) {
+	for(var i = 0; i <= window.maxVal / window.rangeSize; i++) {
 		var bar = chart.append("rect")
-			.attr("x", i * barWidth)
-			.attr("y", window.height - 100 * window.counts[i])
-	    	.attr("width", barWidth - 1)
-	    	.attr("height", 100 * window.counts[i]);
+			.attr("x", i * window.barWidth)
+			.attr("y", window.height - 10 * window.counts[i])
+	    	.attr("width", window.barWidth - 1)
+	    	.attr("height", 10 * window.counts[i]);
 	}
 	
 	// TODO: These tick marks exist, but they are not all visible,
@@ -256,11 +258,11 @@ function drawAverage() {
 
 function getCounts(data) {
 	var counts = {};
-	for (i = 0; i <= window.maxVal; i++)
+	for (i = 0; i <= window.maxVal / window.rangeSize; i++)
 		counts[i] = 0;
 
 	for(i = 0; i < data.length; i++)
-		counts[data[i]] += 1;
+		counts[parseInt(data[i] / window.rangeSize)] += 1;
 	
 	return counts;
 }
