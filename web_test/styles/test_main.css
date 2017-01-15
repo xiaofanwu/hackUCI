@@ -197,3 +197,23 @@ main, #messages-card {
   top: -1px;
   margin-right: 5px;
 }
+
+.svg {
+  display: block;
+  margin: auto;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.div.graphs {
+  display: block;
+  margin: auto;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

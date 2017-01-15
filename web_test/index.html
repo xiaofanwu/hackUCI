@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Learn how to use the Firebase platform on the Web">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LeactureHall</title>
+  <title>LectureHall</title>
 
   <!-- Disable tap highlight on IE -->
   <meta name="msapplication-tap-highlight" content="no">
@@ -15,13 +15,13 @@
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Friendly Chat">
+  <meta name="application-name" content="LectureHall">
   <meta name="theme-color" content="#303F9F">
 
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Friendly Chat">
+  <meta name="apple-mobile-web-app-title" content="LectureHall">
   <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
 
   <!-- Tile icon for Win8 -->
@@ -35,7 +35,7 @@
 
   <!-- App Styling -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/test_main.css">
 </head>
 <body>
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -44,7 +44,7 @@
   <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
     <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
       <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-        <h3><i class="material-icons">chat_bubble_outline</i> Friendly Chat</h3>
+        <h3>LectureHall</h3>
       </div>
       <div id="user-container">
         <div hidden id="user-pic"></div>
@@ -59,9 +59,38 @@
     </div>
   </header>
 
-
+<div class="graphs">
+<svg class="line"></svg>
+<svg class="bar"></svg>
 </div>
 
+<form id="myForm">
+Course Code:
+  <select id="selectClass" onChange="getQuestions();">
+    <option>Choose a Course</option>
+  </select>
+</form>
+
+<form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
+  wrong1.value, wrong2.value, wrong3.value, wrong4.value)">  
+  Question text:
+   <input type="text" id="question" maxlength="40"><br>
+   Correct answer: 
+   <input type="text" id="correct" maxlength="40"><br>
+   First wrong answer: 
+   <input type="text" id="wrong1" maxlength="40"><br>
+   Second wrong answer:
+   <input type="text" id="wrong2" maxlength="40"><br>
+   Third wrong answer:
+   <input type="text" id="wrong3" maxlength="40"><br>
+   Fourth wrong answer:
+   <input type="text" id="wrong4" maxlength="40"><br>
+   <input name="Submit"  type="submit" value="Submit"/>
+</form>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
 <script>
@@ -76,5 +105,7 @@
   firebase.initializeApp(config);
 </script>
 <script src="scripts/main.js"></script>
+<script src="graph.js"></script>
+<script> main(); </script>
 </body>
 </html>
