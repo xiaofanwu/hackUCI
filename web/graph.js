@@ -18,8 +18,8 @@ function initRatingsChart() {
         data: {
             labels: ["0 - 10", "10 - 20", "20 - 30", "30 - 40", "40 - 50", "50 - 60", "60 - 70", "70 - 80", "80 - 90", "90 - 100"],
 			datasets: [{
-                label: '# of Votes',
-                data: window.counts,
+                label: 'Ratings Per Bucket',
+                data: [],
 	            backgroundColor: [
 	                'rgba(255, 0, 0, 0.5)',
 	                'rgba(255, 50, 0, 0.5)',
@@ -53,10 +53,10 @@ function initQuestionsChart() {
     window.questionsChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: [],
+    		labels: ["Question answers will appear here"],
 			datasets: [{
                 label: '# of Students',
-                data: window.answerCounts
+                data: [0]
             }]
         },
         options: {
@@ -96,7 +96,8 @@ function drawGraph() {
 				var rating = childSnapshot.child("rating").val();
 				var timestamp = childSnapshot.child("timestamp").val();
 
-				// Decrease weighting by a factor of 2 every five minutes
+				// Decrease weight for each rating by a factor of 2 every five minutes, until
+				// 500 minutes have passed.
 				var weight;
 				if((Date.now() / 1000.0 - timestamp) < 30000) {
 					weight = Math.pow(2, (timestamp - Date.now() / 1000.0) / 300.0);
@@ -110,19 +111,20 @@ function drawGraph() {
 				console.log(Date.now() / 1000);
 			});
 
+			// Add fake data to fill chart
 			while(window.data.length < window.maxDataLength) {
 				var newItem = {time: (Date.now() / 1000) + (window.data.length - window.maxDataLength), val: 0};
 				window.data.push(newItem);
 			}
 			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalWeight )});
 			
-			update();
+			updateLineChart();
 			drawAverage();
 			getCurrentRatingsAndDrawInstant();
 		});
 	}
 	else {
-		update();
+		updateLineChart();
 		for(var i = 0; i < window.maxDataLength; i++) {
 			window.data.push({time: (Date.now() / 1000) - window.maxDataLength + i,
 				 val: 0});
@@ -133,9 +135,8 @@ function drawGraph() {
 	}
 }
 
-function update() {
+function updateLineChart() {
 	d3.select("svg.line").selectAll("*").remove();
-	//d3.select("svg.bar").selectAll("*").remove();
 	
 	if(window.data.length > window.maxDataLength)
 		window.data.shift();
@@ -264,8 +265,7 @@ function getQuestions() {
 	drawGraph();
 	var allGeoData = [];
 
-	firebase.database().ref('Classes/' + current_cid() + '/Attendence').on('value',function(snapshot){
-
+	firebase.database().ref('Classes/' + current_cid() + '/Attendence').on('value',function(snapshot) {
 	   snapshot.forEach(function(childSnapshot) {
 		      var key = childSnapshot.key;
 		      // childData will be the actual contents of the child
@@ -288,6 +288,16 @@ function getQuestions() {
 		    el.value = opt;
 		    select.appendChild(el);
 		}
+	});
+	
+	firebase.database().ref('Classes/' + current_cid() + '/studentQuestions').on('value', function(snapshot) {
+		var value = "";
+		window.messages = snapshot.val();
+		for(messageId in window.messages) {
+			messageText = window.messages[messageId].text;
+			value += messageText + "\n\n";
+		}
+		document.getElementById("textBox").value = value;
 	});
 }
 
