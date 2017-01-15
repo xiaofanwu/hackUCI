@@ -3,6 +3,14 @@ function main() {
 	window.rangeSize = 10;
 	window.counts = [ 1, 2, 3 ];
 
+	initRatingsChart();
+	initQuestionsChart();
+	
+	getClasses();
+	drawGraph();
+}
+
+function initRatingsChart() {
     var ctx = document.getElementById("ratingsChart");
     window.myChart = new Chart(ctx, {
         type: 'bar',
@@ -36,9 +44,42 @@ function main() {
         }
     });
 	window.myChartData = window.myChart.data.datasets[0];
-	
-	getClasses();
-	drawGraph();
+}
+
+function initQuestionsChart() {
+    var ctx = document.getElementById("questionsChart");
+    window.myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [],
+			datasets: [{
+                label: '# of Votes',
+                data: window.counts,
+	            backgroundColor: [
+	                'rgba(255, 0, 0, 0.5)',
+	                'rgba(255, 50, 0, 0.5)',
+	                'rgba(255, 100, 0, 0.5)',
+	                'rgba(255, 150, 0, 0.5)',
+					'rgba(255, 240, 0, 0.6)',
+					'rgba(255, 240, 0, 0.6)',
+					'rgba(150, 255, 0, 0.5)',
+					'rgba(100, 255, 0, 0.5)',
+					'rgba(50, 255, 0, 0.5)',
+					'rgba(0, 255, 0, 0.5)'
+	            ]
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+	window.myChartData = window.myChart.data.datasets[0];
 }
 
 function drawGraph() {	
