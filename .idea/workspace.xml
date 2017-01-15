@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ed279727-2a6c-4f0d-b40c-5d01aab3ea9e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hackUCI/src/pages/about/about.html" afterPath="$PROJECT_DIR$/hackUCI/src/pages/about/about.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hackUCI/src/pages/about/about.scss" afterPath="$PROJECT_DIR$/hackUCI/src/pages/about/about.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hackUCI/src/pages/login/login.html" afterPath="$PROJECT_DIR$/hackUCI/src/pages/login/login.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hackUCI/src/pages/login/login.scss" afterPath="$PROJECT_DIR$/hackUCI/src/pages/login/login.scss" />
     </list>
     <ignored path="hackUCI.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,11 +34,41 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="about.scss" pinned="false" current-in-tab="true">
+      <file leaf-file-name="about.scss" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hackUCI/src/pages/about/about.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.07672634">
-              <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+            <state vertical-scroll-proportion="-0.1923077">
+              <caret line="1" column="2" selection-start-line="1" selection-start-column="2" selection-end-line="7" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hackUCI/src/pages/login/login.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.54902">
+              <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.scss" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/hackUCI/src/pages/login/login.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.2685422">
+              <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hackUCI/src/pages/login/login.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -59,6 +89,8 @@
         <option value="$PROJECT_DIR$/web test/index.html" />
         <option value="$PROJECT_DIR$/hackUCI/src/pages/about/about.html" />
         <option value="$PROJECT_DIR$/hackUCI/src/pages/about/about.scss" />
+        <option value="$PROJECT_DIR$/hackUCI/src/pages/login/login.html" />
+        <option value="$PROJECT_DIR$/hackUCI/src/pages/login/login.scss" />
       </list>
     </option>
   </component>
@@ -166,6 +198,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="pages" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hackUCI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hackUCI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hackUCI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pages" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="login" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -308,10 +366,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/hackUCI/src/pages/login/login.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hackUCI/src/pages/login/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.54902">
+          <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/hackUCI/src/pages/about/about.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.07672634">
-          <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+        <state vertical-scroll-proportion="-0.1923077">
+          <caret line="1" column="2" selection-start-line="1" selection-start-column="2" selection-end-line="7" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hackUCI/src/pages/login/login.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2685422">
+          <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
           <folding />
         </state>
       </provider>
