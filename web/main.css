@@ -1,5 +1,4 @@
 <style> /* set the CSS */
-
 body { 
   margin:0;
   font: 12px Arial;
@@ -39,6 +38,57 @@ form {
 	left:40px;
 }
 
+
+/* Style the list */
+ul.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: steelblue;
+    //background-color: #f1f1f1;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: right;}
+
+ul.tab li.left {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    float:left;
+    font-size: 24px;
+}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {background-color: steelblue;}
+					//#ddd;}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {background-color: #ccc;}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    /*border: 1px solid #ccc;*/
+    border-top: none;
+}
+
+
 /*ul {
     list-style-type: none;
     margin: 0;
@@ -69,5 +119,21 @@ li a:hover:not(.active) {
 .active {
     background-color: #4CAF50;
 }*/
+
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+    padding: 2px 16px;
+}
 
 </style>

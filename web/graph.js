@@ -1,7 +1,75 @@
 function main() {
 	window.maxDataLength = 100;
+
+	window.rangeSize = 10;
+	window.counts = [];
+
+	initRatingsChart();
+	initQuestionsChart();
+	
 	getClasses();
 	drawGraph();
+}
+
+function initRatingsChart() {
+    var ctx = document.getElementById("ratingsChart");
+    window.ratingsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["0 - 10", "10 - 20", "20 - 30", "30 - 40", "40 - 50", "50 - 60", "60 - 70", "70 - 80", "80 - 90", "90 - 100"],
+			datasets: [{
+                label: 'Ratings Per Bucket',
+                data: [],
+	            backgroundColor: [
+	                'rgba(255, 0, 0, 0.5)',
+	                'rgba(255, 50, 0, 0.5)',
+	                'rgba(255, 100, 0, 0.5)',
+	                'rgba(255, 150, 0, 0.5)',
+					'rgba(255, 240, 0, 0.6)',
+					'rgba(255, 240, 0, 0.6)',
+					'rgba(150, 255, 0, 0.5)',
+					'rgba(100, 255, 0, 0.5)',
+					'rgba(50, 255, 0, 0.5)',
+					'rgba(0, 255, 0, 0.5)'
+	            ]
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+	window.ratingsChartData = window.ratingsChart.data.datasets[0];
+}
+
+function initQuestionsChart() {
+    var ctx = document.getElementById("questionsChart");
+	window.answerCounts = [];
+    window.questionsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+    		labels: ["Question answers will appear here"],
+			datasets: [{
+                label: '# of Students',
+                data: [0]
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+	window.questionsChartData = window.questionsChart.data.datasets[0];
 }
 
 function drawGraph() {	
@@ -22,28 +90,41 @@ function drawGraph() {
 		
 		window.currentRef = firebase.database().ref('/Classes/' + classId + '/Students');	
 		window.currentRef.on('value', function(snapshot) {
-			var totalStudents = snapshot.numChildren();
-			console.log(totalStudents);
 			var sumRating = 0;
+			var totalWeight = 0;
 			snapshot.forEach(function(childSnapshot) {
-				var childData = childSnapshot.child("rating").val();
+				var rating = childSnapshot.child("rating").val();
+				var timestamp = childSnapshot.child("timestamp").val();
 
-				sumRating += childData;
+				// Decrease weight for each rating by a factor of 2 every five minutes, until
+				// 500 minutes have passed.
+				var weight;
+				if((Date.now() / 1000.0 - timestamp) < 30000) {
+					weight = Math.pow(2, (timestamp - Date.now() / 1000.0) / 300.0);
+				} else {
+					weight = Math.pow(2, -100);
+				}
+
+				sumRating += rating * weight;
+				totalWeight += weight;
+				console.log(rating + ", " + (Date.now() / 1000.0 - timestamp) + ", " + weight);
+				console.log(Date.now() / 1000);
 			});
 
+			// Add fake data to fill chart
 			while(window.data.length < window.maxDataLength) {
 				var newItem = {time: (Date.now() / 1000) + (window.data.length - window.maxDataLength), val: 0};
 				window.data.push(newItem);
 			}
-			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalStudents)});
+			window.data.push({time: Date.now() / 1000, val: parseInt(sumRating / totalWeight )});
 			
-			update();
+			updateLineChart();
 			drawAverage();
 			getCurrentRatingsAndDrawInstant();
 		});
 	}
 	else {
-		update();
+		updateLineChart();
 		for(var i = 0; i < window.maxDataLength; i++) {
 			window.data.push({time: (Date.now() / 1000) - window.maxDataLength + i,
 				 val: 0});
@@ -54,9 +135,9 @@ function drawGraph() {
 	}
 }
 
-function update() {
+function updateLineChart() {
 	d3.select("svg.line").selectAll("*").remove();
-	d3.select("svg.bar").selectAll("*").remove();
+	
 	if(window.data.length > window.maxDataLength)
 		window.data.shift();
 }
@@ -77,11 +158,16 @@ function getCurrentRatingsAndDrawInstant() {
 	if(classId == "Choose a Course") {
 		console.log("Default course");
 		window.counts = [];
-		for(var i = 0; i <= window.maxVal; i++)
+
+		for(var i = 0; i < window.maxVal / window.rangeSize; i++)
 			window.counts.push(0);
-		drawInstant();
+		
+		console.log("Counts: " + window.counts);
+		window.ratingsChartData.data = window.counts;
+		window.ratingsChart.update();
+		
 	} else {
-		console.log("Getting ratings for: " + classId);
+		//console.log("Getting ratings for: " + classId);
 		firebase.database().ref('/Classes/' + classId + '/Students').once('value').then(function(snapshot) {
 			window.studentData = snapshot.val();
 			var ratings = [];
@@ -89,57 +175,32 @@ function getCurrentRatingsAndDrawInstant() {
 				ratings.push(window.studentData[studentId].rating);
 			}
 			
-			console.log("Ratings = " + ratings);
-			window.counts = getCounts(ratings);
-			drawInstant();
+			//console.log("Ratings = " + ratings);
+			window.counts = getCounts(ratings);			
+			window.ratingsChartData.data = window.counts;
+			window.ratingsChart.update();
 		});
 	}
+
+	console.log("Counts: " + window.counts.length)
 }
 
-function drawInstant() {
-	// Set counts
-	console.log("Drawing instant graph");
-	var barWidth = window.widthInstant / window.maxVal;
+function getCounts(data) {
+	var countObject = {};
+	for (var i = 0; i <= window.maxVal / window.rangeSize; i++)
+		countObject[i] = 0;
 
-	var x = d3.scale.linear().range([0, window.widthInstant]);
-	var y = d3.scale.linear().range([window.height, 0]);
-
-	var chart = d3.select("svg.bar")
-	        .attr("width", window.widthAverage + window.margin.left + window.margin.right)
-	        .attr("height", window.height + window.margin.top + window.margin.bottom)
-	    .append("g")
-	        .attr("transform", 
-				"translate(" + window.margin.left + "," + window.margin.top + ")");
+	for(var i = 0; i < data.length; i++)
+		countObject[parseInt(data[i] / window.rangeSize)] += 1;
 	
-	// Define the axes
-	var xAxis = d3.svg.axis().scale(x)
-	    .orient("bottom").ticks(5);
-	var yAxis = d3.svg.axis().scale(y)
-	    .orient("left").ticks(5);
+	console.log(countObject);
 	
-    x.domain([0, window.maxVal + 1]);
-	y.domain([0, 100]);
-
-	for(var i = 0; i <= window.maxVal; i++) {
-		var bar = chart.append("rect")
-			.attr("x", i * barWidth)
-			.attr("y", window.height - 100 * window.counts[i])
-	    	.attr("width", barWidth - 1)
-	    	.attr("height", 100 * window.counts[i]);
-	}
-	
-	// TODO: These tick marks exist, but they are not all visible,
-	// and none of the labels are visible.
-	// Add the X Axis
-	chart.append("g")
-	    .attr("class", "x axis")
-	    .attr("transform", "translate(0," + height + ")")
-	    .call(xAxis);
-
-	// Add the Y Axis
-	chart.append("g")
-	    .attr("class", "y axis")
-	    .call(yAxis);
+	var countsArray = [];
+	for(var i = 0; i < window.maxVal / window.rangeSize; i++)
+		countsArray.push(countObject[i]);
+		
+	countsArray[(window.maxVal / window.rangeSize) - 1] += countObject[window.maxVal / window.rangeSize];
+	return countsArray;
 }
 
 // Gets all available courses and adds them to the dropdown selector
@@ -164,21 +225,117 @@ function current_cid() {
 	return e.options[e.selectedIndex].value;
 }
 
+function initMap() {
+	console.log("came here$$$");
+
+	window.map = new google.maps.Map(document.getElementById('map'), {
+	  zoom: 13,
+	  center: {lat:33.645278, lng: -117.831287}
+});
+
+// Create an array of alphabetical characters used to label the markers.
+
+// Add some markers to the map.
+// Note: The code uses the JavaScript Array.prototype.map() method to
+// create an array of markers based on a given "locations" array.
+// The map() method here has nothing to do with the Google Maps API.
+
+}
+
+function addMarker(locations){
+	var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			console.log(locations);
+
+	var markers = locations.map(function(location, i) {
+		return new google.maps.Marker({
+    		position: location,
+    		label: labels[i % labels.length]
+  		});
+	});
+
+	// Add a marker clusterer to manage the markers.
+	var markerCluster = new MarkerClusterer(window.map, markers,
+	    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+}
+
+
 function getQuestions() {
-	console.log("Got the questions")
+	console.log(current_cid(),"classid****");
+	console.log("Got the questions");
 	drawGraph();
+	var allGeoData = [];
+
+	firebase.database().ref('Classes/' + current_cid() + '/Attendence').on('value',function(snapshot) {
+	   snapshot.forEach(function(childSnapshot) {
+		      var key = childSnapshot.key;
+		      // childData will be the actual contents of the child
+		      var childData = childSnapshot.val();
+		      console.log(childData);
+		      console.log(childData["lat"]);
+		      allGeoData.push(childData);
+		      console.log(allGeoData,"ALLgEOdATA");
+		  });
+	   addMarker(allGeoData);
+	});
+
 	firebase.database().ref('Classes/' + current_cid() + '/questions').once('value').then(function(snapshot) {
 		var qids = Object.keys(snapshot.val());
-		
-		/*var select = document.getElementById("selectQuestion"); 
+		var select = document.getElementById("selectQuestion"); 
 		for(var i = 0; i < qids.length; i++) {
 		    var opt = qids[i];
 		    var el = document.createElement("option");
 		    el.textContent = opt;
 		    el.value = opt;
 		    select.appendChild(el);
-		}*/
+		}
 	});
+	
+	// Text box for student questions
+	/*firebase.database().ref('Classes/' + current_cid() + '/studentQuestions').on('value', function(snapshot) {
+		var value = "";
+		window.messages = snapshot.val();
+		for(messageId in window.messages) {
+			messageText = window.messages[messageId].question;
+			value += messageText + "\n\n";
+		}
+		document.getElementById("textBox").value = value;
+	});*/
+	
+	
+	// We're adding student questions as cards instead.
+	firebase.database().ref('Classes/' + current_cid() + '/studentQuestions').on('value', function(snapshot) {
+		window.studentQuestions = snapshot.val();
+		// Clear container
+		var cardContainer = document.getElementById("cardContainer");
+		while (cardContainer.hasChildNodes()) {
+		    cardContainer.removeChild(cardContainer.lastChild);
+		}
+		
+		// Add unhandled question cards
+		for(questionId in window.studentQuestions) {
+			if(!window.studentQuestions[questionId].handled) {
+				var studentId = window.studentQuestions[questionId].student;
+				var questionText = window.studentQuestions[questionId].question;
+				var path = 'Classes/' + current_cid() + '/studentQuestions/' + questionId;
+				var card = createCardHTML(studentId, questionText, path);
+				document.getElementById("cardContainer").appendChild(card);
+			}
+		}
+	});
+}
+
+function createCardHTML(studentId, questionText, path) {
+	var newCard = document.createElement('div');
+	newCard.className = "card";
+	newCard.path = path;
+	newCard.innerHTML = "<h4><b>" + studentId + "</b></h4><p>" + questionText + "</p><span id='close' onclick='dismissCard(this)'>x</span>";
+	return newCard;
+}
+
+function dismissCard(cardSpan) {
+	console.log("Dismissing card: " + cardSpan.parentNode.path);
+	firebase.database().ref(cardSpan.parentNode.path).update({handled: true});
+	cardSpan.parentNode.parentNode.removeChild(cardSpan.parentNode);
 }
 
 function current_qid() {
@@ -189,6 +346,27 @@ function current_qid() {
 function showQuestion() {
 	firebase.database().ref('Classes/' + current_cid()).update({
 		current:current_qid()
+	});
+	
+	var questionRef = firebase.database().ref('Classes/' + current_cid() + '/questions/' + current_qid());
+	window.questionData = [];
+	questionRef.once('value').then(function(snapshot) {
+		window.answerCounts = [];
+		var answerTexts = [];
+		window.questionData = snapshot.val();
+		window.questionsChartData.title = window.question.text;
+		for(answerId in window.questionData.answers) {
+			var answerText = window.questionData.answers[answerId].text;
+			answerTexts.push(answerText);
+			
+			var users = window.questionData.answers[answerId].users;
+			window.answerCounts.push(Object.keys(users).length);
+		}
+		
+		console.log("Adding answerCountData");
+		window.questionsChartData.data = window.answerCounts;
+		window.questionsChart.data.labels = answerTexts;
+		window.questionsChart.update();
 	});
 }
 
@@ -223,7 +401,6 @@ function drawAverage() {
 				
     // Scale the range of the data
     x.domain(d3.extent(window.data, function(d) { return d.time; }));
-    //y.domain([0, d3.max(window.data, function(d) { return d.val; })]);
 	y.domain([0, window.maxVal]);
 
     // Add the valueline path.
@@ -243,16 +420,6 @@ function drawAverage() {
         .call(yAxis);
 }
 
-function getCounts(data) {
-	var counts = {};
-	for (i = 0; i <= window.maxVal; i++)
-		counts[i] = 0;
-
-	for(i = 0; i < data.length; i++)
-		counts[data[i]] += 1;
-	
-	return counts;
-}
 
 function addQuestion(txt, correct, wrong1, wrong2, wrong3, wrong4) {
 	alert("Question added!");
@@ -285,4 +452,25 @@ function addQuestion(txt, correct, wrong1, wrong2, wrong3, wrong4) {
 
 function printData() {
 	return window.data;
+}
+
+function openCity(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
 }

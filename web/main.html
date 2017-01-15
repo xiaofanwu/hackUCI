@@ -4,20 +4,54 @@
 <title>
 LectureHall
 </title>
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 30%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+</style>
+
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="main.css"/>
 
-<body>
+<ul class="tab"> 
+  <li class="left"><img src="img/logo.png"/></li>
+  <li class="left">LectureHall</li>
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Homepage')" id="defaultOpen">Homepage</a></li>  
+  <li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Map')">Map</a></li>
+</ul>
 
+<body>
 <!-- <ul>
   <li><a href="#home">LectureHall</a></li>
 </ul> -->
+<div id="map"></div>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWNU9d07vv6-O7ggJy21GkL-Pv1kOEKjQ&callback=initMap">
+    </script>
 
-<div class="header">LectureHall</div>
+<div id="Homepage" class="tabcontent">
+<!-- <div class="header">LectureHall</div> -->
 <svg class="line"></svg>
-<svg class="bar"></svg>
+
+<div id="ratingsContainer" style="width: 50%">
+<canvas id="ratingsChart"></canvas>
+</div>
+
+<div id="questionsContainer" style="width: 50%">
+<canvas id="questionsChart"></canvas>
+</div>
 
 <form id="myForm">
 Course Code:
@@ -26,7 +60,6 @@ Course Code:
   </select>
 </form>
 
-<!--
 <form id="myForm">
 Question:
   <select id="selectQuestion">
@@ -35,7 +68,6 @@ Question:
 </form>
 <button onclick="showQuestion()">Show Question</button>
 <button onclick="removeQuestion()">Remove Question</button>
--->
 
 <form name="addQuestion" action="javascript:addQuestion(question.value, correct.value,
 	wrong1.value, wrong2.value, wrong3.value, wrong4.value)">  
@@ -54,8 +86,11 @@ Question:
    <input name="Submit"  type="submit" value="Submit"/>
 </form>
 
+<div id="cardContainer"></div>
+
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -76,4 +111,18 @@ Question:
 <script src="graph.js"></script>
 <script> main(); </script>
 
+<script>
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+
 </body>
+</div>
+
+<div id="Map" class="tabcontent">
+</div>
+
+
+
+
+

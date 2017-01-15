@@ -4,6 +4,9 @@ import { HomePage } from '../home/home';
 import { AboutPage } from '../about/about';
 import { ContactPage } from '../contact/contact';
 import { NavController } from 'ionic-angular';
+import { ModalController,Modal } from 'ionic-angular';
+import { AddClassPage } from '../add-class/add-class';
+import {LoginPage} from "../login/login";
 
 @Component({
   templateUrl: 'tabs.html'
@@ -16,12 +19,75 @@ export class TabsPage {
   // tab3Root: any = ContactPage;
   userID: any
   classes: FirebaseListObservable<any>;
-  enroll: any; 
-  courseCode = {cc:''}
+  classesAvailable: FirebaseListObservable<any>;
+  enroll: any;
+  selected:String;
+  classesCanEnroll: string[] = [];
+  courseCode = {cc:''};
+  classEnrolled:string[] = [];
 
-  constructor(public navCtrl: NavController, public af: AngularFire) {
+  constructor(public navCtrl: NavController, public af: AngularFire,public modalCtrl: ModalController) {
+    console.log(this.af.auth.getAuth().uid,"authid****");
   	this.classes = af.database.list('/Users/' + this.af.auth.getAuth().uid + '/Enrolled');
-  	console.log(this.classes)
+    this.classesAvailable = af.database.list('/Classes');
+
+    af.database.list('/Users/' + this.af.auth.getAuth().uid + '/Enrolled', { preserveSnapshot: true})
+    .subscribe(snapshots=>{
+        snapshots.forEach(snapshot => {
+          this.classEnrolled.push(snapshot.val());
+         
+        });
+    })
+    console.log(this.classEnrolled,"classava enrolled******");
+
+    this.classesCanEnroll=[];
+    af.database.list('/Classes', { preserveSnapshot: true})
+    .subscribe(snapshots=>{
+        snapshots.forEach(snapshot => {
+          //if the class is already enrolled, do nothing
+          if (this.classEnrolled.indexOf(snapshot.key)==-1){
+            this.classesCanEnroll.push(snapshot.key);
+          }
+        });
+    })
+    console.log(this.classesCanEnroll);
+    console.log("after this********");
+
+    // for (let entry of this.classes) {
+    // console.log(entry); // 1, "string", false
+    // }
+
+  }
+
+  presentModal() {
+    console.log("added moda;");
+    let modal = this.modalCtrl.create(AddClassPage);
+    // this.navCtrl.present(modal);
+
+    modal.present();
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ***********');
+  }
+
+  showSelectValue(mySelect) {
+    this.selected = mySelect;
+  }
+  
+  deleteClass(cid:any){
+    console.log("delete does not work",cid.$key);
+    let toBeDeleted = this.af.database.object('/Users/' + this.userID + '/Enrolled' + cid.$key);
+    toBeDeleted.remove().then(_ => console.log('deleted!!!!!!'));
+
+  }
+
+
+  logout(){
+    console.log("here,logout");
+    this.af.auth.logout();
+    this.navCtrl.pop();
+    // this.navCtrl.push(LoginPage);
   }
 
   classSelect(cid:any) {
@@ -32,8 +98,15 @@ export class TabsPage {
 
   classEnroll(cid:any) {
   	this.userID = this.af.auth.getAuth().uid;
-    this.enroll = this.af.database.list('/Users/' + this.userID + '/Enrolled/').push('new enrollment');
+    this.enroll = this.af.database.list('/Users/' + this.userID + '/Enrolled');
+
+    // this.enroll = this.af.database.list('/Users/' + this.userID + '/Enrolled/').push('new enrollment');
     //console.log(this.courseCode.cc);
-    this.enroll.set(this.courseCode.cc);
+    this.enroll.push(this.selected);
+
+    // this.enroll.set(this.selected);
+    this.navCtrl.push(AboutPage, {
+      cid:this.selected
+    });
   }
 }

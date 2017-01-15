@@ -11,22 +11,52 @@
 </ul> -->
 
 <ion-header>
-  <ion-navbar>
-    <ion-title>Course Code</ion-title>
+
+  <ion-navbar hideBackButton>
+    <ion-title>My Classes</ion-title>
+        <ion-buttons>
+        <button ion-button icon-only (click)="logout()"><ion-icon name="log-out"></ion-icon></button>
+    </ion-buttons>
+
+    <ion-buttons end>
+        <button ion-button icon-only (click)="presentModal()"><ion-icon name="add"></ion-icon></button>
+    </ion-buttons>
   </ion-navbar>
+ 
 </ion-header>
 
+
+
 <ion-content>
-<ion-list>
-	<ion-item *ngFor="let class of classes | async">
-	<button ion-item (click)="classSelect(class.$value)">
-		{{class.$value}}
-	</button>
-	</ion-item>
+
+<ion-list >
+
+ 
+        <ion-item-sliding *ngFor="let class of classes | async" (click)="classSelect(class.$value)">
+ 
+            <ion-item>
+				{{class.$value}}
+            </ion-item>
+ 
+            <ion-item-options>
+                <button ion-button icon-only (click)="deleteClass(class)" danger>
+                    <ion-icon name="trash"></ion-icon>
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+
+ 
 </ion-list>
 
-<ion-input placeholder="Course Code" [(ngModel)]="courseCode.cc"></ion-input>
-<button ion-button round outline (click)="classEnroll()">Enroll</button>
+
+
+
+
+
+
+
+
+
 </ion-content>
 
 <!-- 

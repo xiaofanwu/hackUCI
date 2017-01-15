@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton>
     <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
@@ -22,10 +22,12 @@
 </ion-list>
 
 <button ion-button class="submit-btn" full type="submit" (click)="login()" [disabled]="!registerForm.form.valid">Login</button>
+<div style= "text-align: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom:0;"><button ion-button round outline (click)="register()">Register</button></div>
 
-  <div class="bottom">
-<button ion-button round outline (click)="register()">Register</button>
-  </div>
 
 </form>
 
